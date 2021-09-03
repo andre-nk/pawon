@@ -4,3 +4,4 @@ import 'package:pawon/shared/shared.dart';
 
 part 'primary_buttons.dart';
 part 'custom_forms.dart';
+part 'custom_dialogs.dart';

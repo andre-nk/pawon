@@ -1,16 +1,17 @@
 part of "pages.dart";
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({ Key? key }) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({ Key? key }) : super(key: key);
 
   @override
-  _SignInPageState createState() => _SignInPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
 
+    TextEditingController nameController = TextEditingController();
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
@@ -25,28 +26,10 @@ class _SignInPageState extends State<SignInPage> {
           ),
           SizedBox(height: Spacers.l32),
           PrimaryButton(
-            content: "Masuk dengan Google",
+            content: "Daftar dengan Google",
             isGoogleButton: true,
             isCTA: true,
-            onPressed: (){
-              showDialog(
-                context: context,
-                builder: (context){
-                  return CustomDialog(
-                    title: "Batalkan pembuatan resep?",
-                    content: "Kamu belum selesai membuat resep baru, jika kamu mau kembali ke Beranda, informasi resep ini akan terhapus.",
-                    negativeText: "Kembali",
-                    positiveText: "Lanjutkan",
-                    negativeFunction: (){
-                      Navigator.pop(context);
-                    },
-                    positiveFunction: (){
-                      Navigator.pop(context);
-                    },
-                  );
-                }
-              );
-            }
+            onPressed: (){}
           )
         ],
       );
@@ -60,7 +43,7 @@ class _SignInPageState extends State<SignInPage> {
             style: Font.headingL,
           ),
           SizedBox(height: Spacers.s8),
-          Text("Masuk ke akun kamu dulu ya!", style: Font.incXLMedium)
+          Text("Daftar akun kamu dulu ya!", style: Font.incXLMedium)
         ],
       );
     }
@@ -69,6 +52,7 @@ class _SignInPageState extends State<SignInPage> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          CustomForms(placeholder: "Nama kamu", controller: nameController, isObscured: false),
           CustomForms(placeholder: "E-mail kamu", controller: emailController, isObscured: false),
           CustomForms(placeholder: "Kata sandi kamu", controller: passwordController, isObscured: true),
           Container(
@@ -80,16 +64,11 @@ class _SignInPageState extends State<SignInPage> {
               onPressed: (){}
             ),
           ),
-          SizedBox(height: Spacers.m16),
-          Text(
-            "Lupa kata sandi?",
-            style: Font.incLRegular
-          ),
           googleButton(),
           SizedBox(height: Spacers.l32),
           GestureDetector(
             onTap: (){
-              Navigator.push(context, PageTransition(child: SignUpPage(), type: PageTransitionType.rightToLeftWithFade));
+              Navigator.push(context, PageTransition(child: SignInPage(), type: PageTransitionType.rightToLeftWithFade));
             },
             child: Align(
               alignment: Alignment.center,
@@ -99,8 +78,8 @@ class _SignInPageState extends State<SignInPage> {
                     color: ColorModel.majorText
                   ),
                   children: <TextSpan>[
-                    TextSpan(text: 'Belum punya akun? '),
-                    TextSpan(text: 'Daftar dulu!', style: TextStyle(fontWeight: FontWeight.bold, color: ColorModel.majorText)),
+                    TextSpan(text: 'Udah punya akun? '),
+                    TextSpan(text: 'Masuk saja!', style: TextStyle(fontWeight: FontWeight.bold, color: ColorModel.majorText)),
                   ],
                 ),
               ),
@@ -115,7 +94,7 @@ class _SignInPageState extends State<SignInPage> {
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.symmetric(
-            vertical: 120,
+            vertical: 100,
             horizontal: 40,
           ),
           children: [

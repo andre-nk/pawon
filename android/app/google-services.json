@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "46189187377",
+    "project_id": "pawon-18183",
+    "storage_bucket": "pawon-18183.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46189187377:android:e0af57ae3020637ce52010",
+        "android_client_info": {
+          "package_name": "com.fullstackdre.pawon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46189187377-sol9kqsnsugi5ea5nh75slmnpjdnqi90.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fullstackdre.pawon",
+            "certificate_hash": "96c0fdf4a13e0306727f47974fe5613d86ff42aa"
+          }
+        },
+        {
+          "client_id": "46189187377-m55jm9gcrf1n6muf0217ffrr1tdquqqs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvGWvq88WUEjzGQn2q-LALSJMclbMGhaw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "46189187377-m55jm9gcrf1n6muf0217ffrr1tdquqqs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

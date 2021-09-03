@@ -16,7 +16,7 @@ class Font{
   static TextStyle textMRegular = GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.normal,
-    wordSpacing: 0
+    wordSpacing: 0,
   );
 
   static TextStyle textMMedium = GoogleFonts.inter(
@@ -39,7 +39,7 @@ class Font{
 
   static TextStyle headingS = GoogleFonts.inter(
     fontSize: 20,
-    fontWeight: FontWeight.normal,
+    fontWeight: FontWeight.w500,
     wordSpacing: -0.17
   );
 

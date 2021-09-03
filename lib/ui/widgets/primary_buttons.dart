@@ -20,10 +20,10 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       child: isGoogleButton
       ? Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Ionicons.logo_google, color: ColorModel.kWhite),
-            SizedBox(width: Spacers.s8),
+            SizedBox(width: Spacers.m16),
             Text(
               this.content,
               style: Font.textLMedium.copyWith(
@@ -43,8 +43,8 @@ class PrimaryButton extends StatelessWidget {
         padding: EdgeInsets.only(
           top: Spacers.m16,
           bottom: 18,
-          left: this.isGoogleButton ? 56 : 84,
-          right: this.isGoogleButton ? 56 : 84
+          left: this.isGoogleButton ? 40 : 74,
+          right: this.isGoogleButton ? 40 : 74
         ),
         shape: RoundedRectangleBorder(
           side: BorderSide(color: this.isCTA ? Colors.transparent : ColorModel.kText),
