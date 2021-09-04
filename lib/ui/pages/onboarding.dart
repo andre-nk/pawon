@@ -33,6 +33,7 @@ class OnboardingPage extends StatelessWidget {
                 SizedBox(height: Spacers.xl108),
                 PrimaryButton(
                   content: "Langsung mulai",
+                  isMinified: false,
                   isGoogleButton: false,
                   isCTA: true,
                   onPressed: (){

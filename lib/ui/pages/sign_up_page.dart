@@ -27,6 +27,7 @@ class _SignUpPageState extends State<SignUpPage> {
           SizedBox(height: Spacers.l32),
           PrimaryButton(
             content: "Daftar dengan Google",
+            isMinified: false,
             isGoogleButton: true,
             isCTA: true,
             onPressed: (){}
@@ -52,13 +53,14 @@ class _SignUpPageState extends State<SignUpPage> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          CustomForms(placeholder: "Nama kamu", controller: nameController, isObscured: false),
-          CustomForms(placeholder: "E-mail kamu", controller: emailController, isObscured: false),
-          CustomForms(placeholder: "Kata sandi kamu", controller: passwordController, isObscured: true),
+          CustomForms(isSearchForm: false, placeholder: "Nama kamu", controller: nameController, isObscured: false),
+          CustomForms(isSearchForm: false, placeholder: "E-mail kamu", controller: emailController, isObscured: false),
+          CustomForms(isSearchForm: false, placeholder: "Kata sandi kamu", controller: passwordController, isObscured: true),
           Container(
             width: double.infinity,
             child: PrimaryButton(
               content: "Masuk ke akun kamu",
+              isMinified: false,
               isGoogleButton: false,
               isCTA: false,
               onPressed: (){}
