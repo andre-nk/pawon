@@ -71,12 +71,17 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
                 ),
               ),
               SizedBox(width: Spacers.m24),
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: ColorModel.disabledRed,
-                  borderRadius: Spacers.borderRadius
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, PageTransition(child: ProfilePage(), type: PageTransitionType.rightToLeftWithFade));
+                },
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: ColorModel.disabledRed,
+                    borderRadius: Spacers.borderRadius
+                  ),
                 ),
               )
             ]
@@ -204,7 +209,9 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
                   ),
                 ),
               ),
-              Positioned(
+              searchOpacity.value == 0.0
+              ? SizedBox()
+              : Positioned(
                 child: Opacity(
                   opacity: searchOpacity.value,
                   child: Padding(

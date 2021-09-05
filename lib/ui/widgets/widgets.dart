@@ -8,3 +8,4 @@ part 'custom_forms.dart';
 part 'custom_dialogs.dart';
 part 'dual_list_tile.dart';
 part 'photo_list_tile.dart';
+part 'custom_app_bar.dart';

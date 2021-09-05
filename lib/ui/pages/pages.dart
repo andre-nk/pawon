@@ -12,3 +12,5 @@ part "homepage.dart";
 part 'sign_in_page.dart';
 part 'sign_up_page.dart';
 part 'wrapper_page.dart';
+part 'profile_page.dart';
+part 'status_page.dart';

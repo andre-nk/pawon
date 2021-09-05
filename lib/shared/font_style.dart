@@ -43,7 +43,7 @@ class Font{
     wordSpacing: -0.17
   );
 
-  static TextStyle headingmM= GoogleFonts.inter(
+  static TextStyle headingM= GoogleFonts.inter(
     fontSize: 28,
     fontWeight: FontWeight.w500,
     wordSpacing: -0.21
@@ -64,7 +64,7 @@ class Font{
   static TextStyle headingXS = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.normal,
-    wordSpacing: 7.5
+    wordSpacing: 12.5
   );
 
   static TextStyle incSRegular = GoogleFonts.inconsolata(

@@ -6,6 +6,8 @@ class WrapperPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final scaffoldState = GlobalKey<ScaffoldState>();
+
     Widget buildContent(int index){
       return HomePage();
     }
@@ -29,6 +31,7 @@ class WrapperPage extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
                 onPressed: (){},
@@ -37,10 +40,52 @@ class WrapperPage extends StatelessWidget {
                   color: ColorModel.primaryRed
                 ),
               ),
-              Icon(
-                Ionicons.add_circle_outline,
-                size: 28,
-                color: ColorModel.majorText
+              IconButton(
+                onPressed: (){
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context){
+                      return Container(
+                        height: 112,
+                        margin: EdgeInsets.only(
+                          bottom: 20
+                        ),
+                        width: double.infinity,
+                        child: ListView(
+                          children: ListTile.divideTiles(
+                              context: context,
+                              tiles: [
+                                ListTile(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: Spacers.s4,
+                                    horizontal: Spacers.m24,
+                                  ),
+                                  title: Text(
+                                    "Buat resep manual",
+                                    style: Font.textMRegular
+                                  ),
+                                ),
+                                ListTile(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: Spacers.s4,
+                                    horizontal: Spacers.m24,
+                                  ),
+                                  title: Text(
+                                    "Buat resep otomatis (Instagram / foto)",
+                                    style: Font.textMRegular
+                                  ),
+                                ),
+                              ]
+                          ).toList(),
+                        )
+                      );
+                    }
+                  );
+                },
+                icon: Icon(
+                  Ionicons.add_circle_outline,
+                  size: 28,
+                ),
               ),
               Icon(
                 Ionicons.document_text_outline,
@@ -53,6 +98,7 @@ class WrapperPage extends StatelessWidget {
     }
 
     return Scaffold(
+      key: scaffoldState,
       backgroundColor: ColorModel.kWhite,
       body: Stack(
         children: [
