@@ -5,11 +5,8 @@ class WrapperPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final scaffoldState = GlobalKey<ScaffoldState>();
-
     Widget buildContent(int index){
-      return HomePage();
+      return PlanPage();
     }
 
     Widget customNavigationBar(){
@@ -87,10 +84,13 @@ class WrapperPage extends StatelessWidget {
                   size: 28,
                 ),
               ),
-              Icon(
-                Ionicons.document_text_outline,
-                color: ColorModel.majorText
-              )
+              IconButton(
+                onPressed: (){},
+                icon: Icon(
+                  Ionicons.document_text_outline,
+                  color: ColorModel.majorText
+                ),
+              ),
             ],
           ),
         ),
@@ -98,7 +98,6 @@ class WrapperPage extends StatelessWidget {
     }
 
     return Scaffold(
-      key: scaffoldState,
       backgroundColor: ColorModel.kWhite,
       body: Stack(
         children: [

@@ -127,21 +127,23 @@ class ProfilePage extends StatelessWidget {
       body: Container(
         width: double.infinity,
         padding: EdgeInsets.all(Spacers.m24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: ListView(
           children: [
             SizedBox(height: 56),
-            Container(
-              height: 55,
-              width: 55,
-              decoration: BoxDecoration(
-                color: ColorModel.disabledRed,
-                borderRadius: Spacers.borderRadius
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                height: 55,
+                width: 55,
+                decoration: BoxDecoration(
+                  color: ColorModel.disabledRed,
+                  borderRadius: Spacers.borderRadius
+                ),
               ),
             ),
             SizedBox(height: 56),
             settingsTile(),
-            Spacer(),
+            SizedBox(height: 56),
             Container(
               width: double.infinity,
               child: PrimaryButton(
@@ -166,9 +168,12 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: Spacers.m24),
-            Text(
-              "Pawon v.1.0",
-              style: Font.incLRegular,
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Pawon v.1.0",
+                style: Font.incLRegular,
+              ),
             ),
             SizedBox(height: Spacers.m24),
           ],

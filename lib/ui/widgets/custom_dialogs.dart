@@ -28,60 +28,61 @@ class CustomDialog extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(15)),
         side: BorderSide(color: ColorModel.kText)
       ),
-      child: Container(
-        height: 210,
-        width: double.infinity - 100,
-        padding: EdgeInsets.symmetric(
-          vertical: Spacers.l28,
-          horizontal: Spacers.l28
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    this.title,
-                    style: Font.headingS,
-                  ),
-                  SizedBox(height: Spacers.s12),
-                  Text(
-                    this.content,
-                    style: Font.textMRegular.copyWith(
-                      height: 1.5
+      child: AspectRatio(
+        aspectRatio: 2/1.75,
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: Spacers.l28,
+            horizontal: Spacers.l28
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      this.title,
+                      style: Font.headingS,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-              SizedBox(height: Spacers.s12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: this.negativeFunction,
-                    child: Text(
-                      this.negativeText,
-                      style: Font.textLRegular.copyWith(
-                        color: ColorModel.activeRed
+                    SizedBox(height: Spacers.s12),
+                    Text(
+                      this.content,
+                      style: Font.textMRegular.copyWith(
+                        height: 1.5
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                SizedBox(height: Spacers.s12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                      onTap: this.negativeFunction,
+                      child: Text(
+                        this.negativeText,
+                        style: Font.textLRegular.copyWith(
+                          color: ColorModel.activeRed
+                        ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: this.positiveFunction,
-                    child: Text(
-                      this.positiveText,
-                      style: Font.textLMedium.copyWith(
-                        color: ColorModel.kBlue
+                    GestureDetector(
+                      onTap: this.positiveFunction,
+                      child: Text(
+                        this.positiveText,
+                        style: Font.textLMedium.copyWith(
+                          color: ColorModel.kBlue
+                        ),
                       ),
-                    ),
-                  )
-                ]
-              )
-            ],
+                    )
+                  ]
+                )
+              ],
+            )
           )
-        )
+        ),
       )
     );
   }

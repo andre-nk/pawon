@@ -47,11 +47,10 @@ class CustomAppBar extends StatelessWidget {
       ),
       title: this.rightButton != null
       ? Container(
-          margin: EdgeInsets.only(
-            right: Spacers.m16,
-          ),
-          height: double.infinity,
-          child: Center(
+          height: 64,
+          width: double.infinity,
+          child: Align(
+            alignment: Alignment.center,
             child: Text(
               this.title,
               style: Font.headingXS.copyWith(
@@ -68,7 +67,11 @@ class CustomAppBar extends StatelessWidget {
         ? Container(
             width: 80,
             height: double.infinity,
-            margin: EdgeInsets.all(Spacers.m16),
+            margin: EdgeInsets.only(
+              right: Spacers.m16,
+              top: Spacers.m16,
+              bottom: Spacers.m16  
+            ),
             child: Center(
               child: TextButton(
                 onPressed: this.rightButtonMethod,

@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pawon/shared/shared.dart';
@@ -14,3 +16,4 @@ part 'sign_up_page.dart';
 part 'wrapper_page.dart';
 part 'profile_page.dart';
 part 'status_page.dart';
+part 'plan_page.dart';

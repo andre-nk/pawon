@@ -14,15 +14,15 @@ class ColorModel{
   static Color kGreen = HexColor("55AC59"); 
   static Map<int, Color> color =
   {
-  50:Color.fromRGBO(136,14,79, .1),
-  100:Color.fromRGBO(136,14,79, .2),
-  200:Color.fromRGBO(136,14,79, .3),
-  300:Color.fromRGBO(136,14,79, .4),
-  400:Color.fromRGBO(136,14,79, .5),
-  500:Color.fromRGBO(136,14,79, .6),
-  600:Color.fromRGBO(136,14,79, .7),
-  700:Color.fromRGBO(136,14,79, .8),
-  800:Color.fromRGBO(136,14,79, .9),
-  900:Color.fromRGBO(136,14,79, 1),
+  50:Color.fromRGBO(221,121,115, .1),
+  100:Color.fromRGBO(221,121,115, .2),
+  200:Color.fromRGBO(221,121,115, .3),
+  300:Color.fromRGBO(221,121,115, .4),
+  400:Color.fromRGBO(221,121,115, .5),
+  500:Color.fromRGBO(221,121,115, .6),
+  600:Color.fromRGBO(221,121,115, .7),
+  700:Color.fromRGBO(221,121,115, .8),
+  800:Color.fromRGBO(221,121,115, .9),
+  900:Color.fromRGBO(221,121,115, 1),
   };
 }
