@@ -22,7 +22,6 @@ class CustomForms extends StatelessWidget {
           )
         ]
       ),
-      margin: EdgeInsets.only(bottom: Spacers.l28),
       child: TextFormField(
         cursorColor: ColorModel.majorText,
         obscureText: this.isObscured,

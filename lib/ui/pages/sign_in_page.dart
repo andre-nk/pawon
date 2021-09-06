@@ -71,7 +71,9 @@ class _SignInPageState extends State<SignInPage> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           CustomForms(isSearchForm: false, placeholder: "E-mail kamu", controller: emailController, isObscured: false),
+          SizedBox(height: Spacers.l28),
           CustomForms(isSearchForm: false, placeholder: "Kata sandi kamu", controller: passwordController, isObscured: true),
+          SizedBox(height: Spacers.l28),
           Container(
             width: double.infinity,
             child: PrimaryButton(
