@@ -6,6 +6,7 @@ import 'package:pawon/shared/shared.dart';
 part 'primary_buttons.dart';
 part 'custom_forms.dart';
 part 'custom_dialogs.dart';
+part 'custom_checkbox.dart';
 part 'dual_list_tile.dart';
 part 'photo_list_tile.dart';
 part 'custom_app_bar.dart';

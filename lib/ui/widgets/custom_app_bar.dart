@@ -28,6 +28,7 @@ class CustomAppBar extends StatelessWidget {
           child: TextButton(
             onPressed: this.leftButtonMethod,
             style: ElevatedButton.styleFrom(
+              onSurface: ColorModel.disabledRed,
               primary: ColorModel.kWhite,
               shape: RoundedRectangleBorder(
                 borderRadius: Spacers.borderRadius,
@@ -76,6 +77,7 @@ class CustomAppBar extends StatelessWidget {
               child: TextButton(
                 onPressed: this.rightButtonMethod,
                 style: ElevatedButton.styleFrom(
+                  onSurface: ColorModel.disabledRed,
                   primary: ColorModel.kWhite,
                   shape: RoundedRectangleBorder(
                     borderRadius: Spacers.borderRadius,

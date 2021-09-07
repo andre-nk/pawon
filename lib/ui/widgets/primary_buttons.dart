@@ -59,6 +59,7 @@ class PrimaryButton extends StatelessWidget {
             ),
           ),
         style: ElevatedButton.styleFrom(
+          onSurface: ColorModel.disabledRed,
           primary: this.isCTA ? ColorModel.primaryRed : ColorModel.kWhite,
           padding: EdgeInsets.only(
             top: isMinified ? 10 : Spacers.m16,

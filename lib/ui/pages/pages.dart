@@ -17,3 +17,4 @@ part 'wrapper_page.dart';
 part 'profile_page.dart';
 part 'status_page.dart';
 part 'plan_page.dart';
+part 'ingredient_page.dart';

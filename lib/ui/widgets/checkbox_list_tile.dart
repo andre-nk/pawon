@@ -1,11 +1,20 @@
 part of "widgets.dart";
 
-class CheckBoxListTile extends StatelessWidget {
+class CheckBoxListTile extends StatefulWidget {
 
   final String title;
   final String subtitle;
-  const CheckBoxListTile({ Key? key, required this.title, required this.subtitle }) : super(key: key);
+  final String? imageURL;
+  final bool? isTrailed;
+  const CheckBoxListTile({ Key? key, required this.title, required this.subtitle, this.imageURL, this.isTrailed }) : super(key: key);
 
+  @override
+  State<CheckBoxListTile> createState() => _CheckBoxListTileState();
+}
+class _CheckBoxListTileState extends State<CheckBoxListTile> {
+
+  bool checkboxValue = false;
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,51 +23,67 @@ class CheckBoxListTile extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            height: 20,
-            width: 20,
-            decoration: BoxDecoration(
-              color: ColorModel.kGreen,
-              borderRadius: Spacers.borderRadius,
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(2),
-              child: Icon(
-                Ionicons.checkmark_outline,
-                size: 16,
-                color: ColorModel.kWhite
-              ),
-            ) 
-          ),
-          SizedBox(width: 20),
-          Container(
-            height: 52,
-            width: 52,
-            decoration: BoxDecoration(
-              color: ColorModel.disabledRed,
-              borderRadius: Spacers.borderRadius
-            ),
-          ),
-          SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: Spacers.s8),
-                child: Text(
-                  "Ayam Cabe Garam",
-                  style: Font.textLRegular
-                ),
+              CustomCheckbox(
+                value: checkboxValue,
+                onChanged: (value){
+                  setState(() {
+                    checkboxValue = value;
+                  });
+                },
               ),
-              Text(
-                "25 menit; 233x dimasak",
-                style: Font.incMRegular.copyWith(
-                  color: ColorModel.majorText
-                ),
-              ), 
-            ]
-          )
+              SizedBox(width: 20),
+              widget.imageURL != null && widget.imageURL != ""
+              ? Row(
+                  children: [
+                    Container(
+                      height: 52,
+                      width: 52,
+                      decoration: BoxDecoration(
+                        color: ColorModel.disabledRed,
+                        borderRadius: Spacers.borderRadius
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                  ],
+                )
+              : SizedBox(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.title,
+                    style: Font.textLRegular
+                  ),
+                  widget.isTrailed == null || widget.isTrailed == false
+                  ? Column(
+                      children: [
+                        SizedBox(height: Spacers.s8),
+                        Text(
+                            widget.subtitle,
+                            style: Font.incMRegular.copyWith(
+                              color: ColorModel.majorText
+                            ),
+                          ),
+                      ],
+                    )
+                  : SizedBox()
+                ]
+              ),
+            ],
+          ),
+          widget.isTrailed != null || widget.isTrailed == true 
+          ? Text(
+              widget.subtitle,
+              style: Font.incMRegular.copyWith(
+                color: ColorModel.majorText
+              ),
+            )
+          : SizedBox()
         ],
       ),
     );

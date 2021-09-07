@@ -248,9 +248,11 @@ class _PlanPageState extends State<PlanPage> {
                 )
               ),
               IconButton(
-                tooltip: "Kalendar",
+                tooltip: "Mulai sesi",
                 padding: EdgeInsets.zero,
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(context, PageTransition(child: IngredientPage(), type: PageTransitionType.rightToLeftWithFade));
+                },
                 icon: Icon(
                   Ionicons.play_circle_outline,
                   size: 24,
