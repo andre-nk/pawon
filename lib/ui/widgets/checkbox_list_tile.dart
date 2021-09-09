@@ -65,7 +65,7 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
                         SizedBox(height: Spacers.s8),
                         Text(
                             widget.subtitle,
-                            style: Font.incMRegular.copyWith(
+                            style: Font.incLRegular.copyWith(
                               color: ColorModel.majorText
                             ),
                           ),
@@ -79,7 +79,7 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
           widget.isTrailed != null || widget.isTrailed == true 
           ? Text(
               widget.subtitle,
-              style: Font.incMRegular.copyWith(
+              style: Font.incLRegular.copyWith(
                 color: ColorModel.majorText
               ),
             )

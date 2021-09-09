@@ -108,6 +108,7 @@ class _PlanPageState extends State<PlanPage> {
                           },
                           itemBuilder: (context, index){
                             return CheckBoxListTile(
+                              imageURL: "a",
                               title: "Ayam Cabai Garam",
                               subtitle: "40 menit; 10x dimasak"
                             );
@@ -141,7 +142,7 @@ class _PlanPageState extends State<PlanPage> {
     Widget calendarPicker(){
       return Container(
         color: ColorModel.kWhite,
-        height: Device.size.width > 768 ? 500 : 400,
+        height: 500,
         child: Column(
           children: [
             CustomAppBar(

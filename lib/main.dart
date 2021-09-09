@@ -24,6 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        splashColor: ColorModel.disabledRed,
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color)).copyWith(primary: ColorModel.primaryRed),
         primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color)
       ),
       debugShowCheckedModeBanner: false,

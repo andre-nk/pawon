@@ -11,3 +11,4 @@ part 'dual_list_tile.dart';
 part 'photo_list_tile.dart';
 part 'custom_app_bar.dart';
 part 'checkbox_list_tile.dart';
+part 'instructions_step_tile.dart';

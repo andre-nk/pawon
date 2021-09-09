@@ -1,7 +1,7 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pawon/shared/shared.dart';
@@ -18,3 +18,4 @@ part 'profile_page.dart';
 part 'status_page.dart';
 part 'plan_page.dart';
 part 'ingredient_page.dart';
+part 'instructions_page.dart';
