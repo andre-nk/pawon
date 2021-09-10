@@ -28,7 +28,7 @@ class _InstructionPageState extends State<InstructionPage>{
       body: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(
-          vertical: Spacers.m24,
+          vertical: Spacers.s8,
           horizontal: Spacers.m16
         ),
         child: ListView.builder(
@@ -59,7 +59,7 @@ class _InstructionPageState extends State<InstructionPage>{
                   child: InstructionsStepTile(
                     title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
                     onTap: (){
-                      print("tap");
+                      Navigator.push(context, PageTransition(child: StepPage(), type: PageTransitionType.rightToLeftWithFade));
                     },
                   ),
                 )

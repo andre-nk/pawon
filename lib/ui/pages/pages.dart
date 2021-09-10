@@ -9,6 +9,7 @@ import 'package:pawon/ui/widgets/widgets.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 
+part 'step_page.dart';
 part "onboarding.dart";
 part "homepage.dart";
 part 'sign_in_page.dart';
