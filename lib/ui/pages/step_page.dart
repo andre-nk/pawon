@@ -48,7 +48,7 @@ class _StepPageState extends State<StepPage> {
       );
     }
 
-    Widget calendarPicker(){
+    Widget timerPicker(){
       return Container(
         color: ColorModel.kWhite,
         height: 350,
@@ -96,7 +96,7 @@ class _StepPageState extends State<StepPage> {
             showModalBottomSheet(
               context: context,
               builder: (context){
-                return calendarPicker();
+                return timerPicker();
               }
             );
           },

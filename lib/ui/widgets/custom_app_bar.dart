@@ -7,8 +7,9 @@ class CustomAppBar extends StatelessWidget {
   final String? rightButton;
   final Function() leftButtonMethod;
   final Function()? rightButtonMethod;
+  final bool? rightButtonCTA;
 
-  const CustomAppBar({ Key? key, required this.title, required this.leftButton, this.rightButton, required this.leftButtonMethod, this.rightButtonMethod}) : super(key: key);
+  const CustomAppBar({ Key? key, required this.title, required this.leftButton, this.rightButton, required this.leftButtonMethod, this.rightButtonMethod, this.rightButtonCTA}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,17 +79,23 @@ class CustomAppBar extends StatelessWidget {
                 onPressed: this.rightButtonMethod,
                 style: ElevatedButton.styleFrom(
                   onSurface: ColorModel.disabledRed,
-                  primary: ColorModel.kWhite,
+                  primary: this.rightButtonCTA != null && this.rightButtonCTA == true
+                    ? ColorModel.primaryRed
+                    : ColorModel.kWhite,
                   shape: RoundedRectangleBorder(
                     borderRadius: Spacers.borderRadius,
-                    side: BorderSide(color: ColorModel.kText)
+                    side: this.rightButtonCTA != null && this.rightButtonCTA == true
+                    ? BorderSide.none
+                    : BorderSide(color: ColorModel.kText),
                   )
                 ),
                 child: Center(
                   child: Text(
                     this.rightButton ?? "",
                     style: Font.textSRegular.copyWith(
-                      color: ColorModel.majorText
+                      color: this.rightButtonCTA != null && this.rightButtonCTA == true
+                      ? ColorModel.kWhite
+                      : ColorModel.majorText,
                     ),
                   )
                 )

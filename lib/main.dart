@@ -25,7 +25,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         splashColor: ColorModel.disabledRed,
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color)).copyWith(primary: ColorModel.primaryRed),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color)).copyWith(
+          primary: ColorModel.primaryRed.withOpacity(0.75),
+          secondary: ColorModel.primaryRed.withOpacity(0.75),
+        ),
         primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color)
       ),
       debugShowCheckedModeBanner: false,
