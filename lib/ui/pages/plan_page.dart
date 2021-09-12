@@ -126,10 +126,11 @@ class _PlanPageState extends State<PlanPage> {
                     ],
                   ),
                 ),
-                Positioned(
-                  bottom: Spacers.l28,
+                Align(
+                  alignment: Alignment.bottomCenter,
                   child: Container(
                     width: 350,
+                    margin: EdgeInsets.only(bottom: Spacers.l32),
                     child: PrimaryButton(
                       content: "Tambahkan Rencana (10 resep) ",
                       isGoogleButton: false,
@@ -138,7 +139,7 @@ class _PlanPageState extends State<PlanPage> {
                       isHovering: true,
                       onPressed: (){}
                     ),
-                  )
+                  ),
                 )
               ],
             )

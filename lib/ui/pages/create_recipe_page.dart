@@ -34,14 +34,14 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     );
   }
 
-  Widget photoBox(){
+  Widget photoBox(Orientation axis){
     return DottedBorder(
       color: ColorModel.kText,
       borderType: BorderType.RRect,
       radius: Radius.circular(15),
       dashPattern: [10,10],
       child: AspectRatio(
-        aspectRatio: 16/9,
+        aspectRatio: axis == Orientation.landscape ? 16/3 : 16/9,
         child: Container(
           width: double.infinity,
           color: ColorModel.kWhite,
@@ -80,10 +80,10 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     );
   }
 
-  Widget addButton(Icon icon, String content){
+  Widget addButton(Icon icon, String content, Orientation axis){
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: 72
+        horizontal: axis == Orientation.portrait ? 72 : 200
       ),
       alignment: Alignment.center,
       child: TextButton(
@@ -120,6 +120,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
 
   Widget instructionSection(){
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Instruksi resep (opsional)", style: Font.incLRegular),
         TextFormField(
@@ -131,7 +132,10 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
           maxLines: 5,
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: "Ayam cabe garam adalah menu masakan yang sederhana namun kaya rasa. Pedas istimewa, gurih garamnya mengundang selera. Selalu mudah mengundang antrian untuk menikmatinya."
+            hintText: "Ayam cabe garam adalah menu masakan yang sederhana namun kaya rasa. Pedas istimewa, gurih garamnya mengundang selera. Selalu mudah mengundang antrian untuk menikmatinya.",
+            hintStyle: Font.textLMedium.copyWith(
+              color: ColorModel.kText
+            )
           ),
         ),
         Padding(
@@ -173,7 +177,10 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                       style: Font.textLMedium,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Ayam Cabai Garam"
+                        hintText: "Ayam Cabai Garam",
+                        hintStyle: Font.textLMedium.copyWith(
+                          color: ColorModel.kText
+                        )
                       ),
                     ),
                   )
@@ -188,6 +195,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
 
   Widget ingredientSection(){
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Alat dan bahan", style: Font.incLRegular),
         Padding(
@@ -203,9 +211,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                     width: double.infinity,
                     color: ColorModel.kBorder,
                   ),
-                  DualListTile(
-                    title: "Ayam Segar",
-                    trailing: "${(index + 1) * 100} gram"
+                  FormTile(
+                    title: "Penyajian/Servings",
+                    hintText: "1 porsi",
+                    secondaryHintText: "Telur Ayam",
+                    isDouble: true,
+                    controller: servingsCtrl //TODO: LIST CONTAINING CONTROLLERS
                   ),
                 ],
               );
@@ -221,68 +232,80 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     return Scaffold(
       backgroundColor: ColorModel.kWhite,
       appBar: customAppBar(),
-      body: ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: Spacers.m16,
-          vertical: Spacers.s8
-        ).copyWith(
-          bottom: Spacers.l32
-        ),
-        children: [
-          photoBox(),
-          SizedBox(height: Spacers.m24),
-          CustomSimplifiedForm(
-            title: "Judul resep",
-            hintText: "Ayam Cabai Garam",
-            controller: titleCtrl
-          ),
-          divider(),
-          CustomSimplifiedForm(
-            title: "Deskripsi resep (ops.)",
-            hintText: "Ayam cabe garam adalah menu masakan yang sederhana namun kaya rasa. Pedas istimewa, gurih garamnya mengundang selera. Selalu mudah mengundang antrian untuk menikmatinya",
-            controller: descriptionCtrl
-          ),
-          divider(),
-          ingredientSection(),
-          addButton(
-            Icon(
-              Ionicons.add_circle_outline,
-              color: ColorModel.majorText
+      body: OrientationBuilder(
+        builder: (context, axis) {
+          return ListView(
+            padding: EdgeInsets.symmetric(
+              horizontal: Spacers.m16,
+              vertical: Spacers.s8
+            ).copyWith(
+              bottom: Spacers.l32
             ),
-            "Tambahkan alat / bahan"
-          ),
-          SizedBox(height: Spacers.m16),
-          divider(),
-          instructionSection(),
-          addButton(
-            Icon(
-              Ionicons.add_circle_outline,
-              color: ColorModel.majorText
-            ),
-            "Tambahkan langkah"
-          ),
-          SizedBox(height: Spacers.m16),
-          Container(
-            height: 1,
-            width: double.infinity,
-            color: ColorModel.kBorder,
-          ),
-          FormTile(
-            title: "Penyajian/Servings",
-            hintText: "1 porsi",
-            controller: servingsCtrl
-          ),
-          FormTile(
-            title: "Waktu persiapan (ops.)",
-            hintText: "5 menit",
-            controller: prepTimeCtrl
-          ),
-          FormTile(
-            title: "Waktu masak",
-            hintText: "15 menit",
-            controller: cookTimeCtrl
-          )
-        ]
+            children: [
+              photoBox(axis),
+              SizedBox(height: Spacers.m24),
+              CustomSimplifiedForm(
+                title: "Judul resep",
+                hintText: "Ayam Cabai Garam",
+                controller: titleCtrl,
+                axis: axis,
+              ),
+              divider(),
+              CustomSimplifiedForm(
+                title: "Deskripsi resep (ops.)",
+                hintText: "Ayam cabe garam adalah menu masakan yang sederhana namun kaya rasa. Pedas istimewa, gurih garamnya mengundang selera. Selalu mudah mengundang antrian untuk menikmatinya",
+                controller: descriptionCtrl,
+                axis: axis,
+                isMultiline: true,
+              ),
+              divider(),
+              ingredientSection(),
+              addButton(
+                Icon(
+                  Ionicons.add_circle_outline,
+                  color: ColorModel.majorText
+                ),
+                "Tambahkan alat / bahan",
+                axis
+              ),
+              SizedBox(height: Spacers.m16),
+              divider(),
+              instructionSection(),
+              addButton(
+                Icon(
+                  Ionicons.add_circle_outline,
+                  color: ColorModel.majorText
+                ),
+                "Tambahkan langkah",
+                axis
+              ),
+              SizedBox(height: Spacers.m16),
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: ColorModel.kBorder,
+              ),
+              FormTile(
+                title: "Penyajian/Servings",
+                hintText: "1 porsi",
+                isDouble: false,
+                controller: servingsCtrl
+              ),
+              FormTile(
+                title: "Waktu persiapan (ops.)",
+                hintText: "5 menit",
+                isDouble: false,
+                controller: prepTimeCtrl
+              ),
+              FormTile(
+                title: "Waktu masak",
+                hintText: "15 menit",
+                isDouble: false,
+                controller: cookTimeCtrl
+              )
+            ]
+          );
+        }
       )
     );
   }
