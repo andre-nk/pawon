@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pawon/cubit/page_cubit.dart';
 import 'package:pawon/shared/shared.dart';
 import 'package:pawon/ui/pages/pages.dart';
 
@@ -22,17 +24,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        splashColor: ColorModel.disabledRed,
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color)).copyWith(
-          primary: ColorModel.primaryRed.withOpacity(0.75),
-          secondary: ColorModel.primaryRed.withOpacity(0.75),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => PageCubit()
+        )
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          splashColor: ColorModel.disabledRed,
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color)).copyWith(
+            primary: ColorModel.primaryRed.withOpacity(0.75),
+            secondary: ColorModel.primaryRed.withOpacity(0.75),
+          ),
+          primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color)
         ),
-        primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color)
+        debugShowCheckedModeBanner: false,
+        home: OnboardingPage(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: OnboardingPage(),
     );
   }
 }

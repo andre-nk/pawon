@@ -10,8 +10,16 @@ class InstructionsStepTile extends StatefulWidget {
   _InstructionsStepTileState createState() => _InstructionsStepTileState();
 }
 
-class _InstructionsStepTileState extends State<InstructionsStepTile> {
+class _InstructionsStepTileState extends State<InstructionsStepTile> with AnimationMixin{
+  
   bool checkboxValue = false;
+  late Animation<double> checkboxOpacity;
+
+  @override
+  void initState() {
+    checkboxOpacity = 0.0.tweenTo(1.0).animatedBy(controller);
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context) {
