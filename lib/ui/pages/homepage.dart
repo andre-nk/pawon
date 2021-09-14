@@ -150,28 +150,19 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
           ),
           SizedBox(height: Spacers.s12),
           Container(
-            height: MediaQuery.of(context).size.height * 0.8,
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(color: ColorModel.kBorder)
               )
             ),
-            child: ListView.separated(
-              itemCount: 20,
-              separatorBuilder: (context, index){
-                return Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: ColorModel.kBorder,
-                );
-              },
-              itemBuilder: (context, index){
+            child: Column(
+              children: List.generate(20, (index){
                 return PhotoListTile(
                   title: "Ayam Cabe Garam",
-                  subtitle: "${(index + 1) * 5} menit; ${index + 1 * 7}x dimasak",
+                  subtitle: "${(1) * 5} menit; ${1 * 7}x dimasak",
                 );
-              },
+              })
             )
           ),
         ],

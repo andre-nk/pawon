@@ -15,46 +15,6 @@ class _PlanPageState extends State<PlanPage> {
   @override
   Widget build(BuildContext context) {
 
-    Widget createRecipe(){
-      return Container(
-        height: 112,
-        margin: EdgeInsets.only(
-          bottom: 20
-        ),
-        width: double.infinity,
-        child: ListView(
-          children: ListTile.divideTiles(
-              context: context,
-              tiles: [
-                ListTile(
-                  onTap: (){
-                    Navigator.push(context, PageTransition(child: CreateRecipePage(), type: PageTransitionType.rightToLeftWithFade));
-                  },
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: Spacers.s4,
-                    horizontal: Spacers.m24,
-                  ),
-                  title: Text(
-                    "Buat resep manual",
-                    style: Font.textMRegular
-                  ),
-                ),
-                ListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: Spacers.s4,
-                    horizontal: Spacers.m24,
-                  ),
-                  title: Text(
-                    "Buat resep otomatis (Instagram / foto)",
-                    style: Font.textMRegular
-                  ),
-                ),
-              ]
-          ).toList(),
-        )
-      );
-    }
-
     Widget recipePicker(){
       return Wrap(
         children: [
@@ -90,7 +50,7 @@ class _PlanPageState extends State<PlanPage> {
                               showModalBottomSheet(
                                 context: context,
                                 builder: (context){
-                                  return createRecipe();
+                                  return CreateRecipeBottomsheet();
                                 }
                               );
                             },
@@ -273,25 +233,20 @@ class _PlanPageState extends State<PlanPage> {
           ),
           SizedBox(height: Spacers.s4),
           Container(
-            height: 3 * 65,
             width: double.infinity,
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(color: ColorModel.kBorder)
-              )
-            ),
-            child: ListView.separated(
-              itemCount: 3,
-              separatorBuilder: (context, index){
-                return Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: ColorModel.kBorder,
+            child: Column(
+              children: List.generate(5, (index){
+                return Column(
+                  children: [
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: ColorModel.kBorder,
+                    ),
+                    DualListTile(title: "Ayam Cabe Garam", trailing: "${index + 1} porsi")
+                  ],
                 );
-              },
-              itemBuilder: (context, index){
-                return DualListTile(title: "Ayam Cabe Garam", trailing: "${index + 1} porsi");
-              },
+              })
             )
           ),
         ],

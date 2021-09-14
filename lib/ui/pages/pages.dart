@@ -24,3 +24,4 @@ part 'plan_page.dart';
 part 'ingredient_page.dart';
 part 'instructions_page.dart';
 part 'create_recipe_page.dart';
+part 'history_page.dart';

@@ -37,7 +37,7 @@ class WrapperPage extends StatelessWidget {
                   context.read<PageCubit>().setPage(0);
                 },
                 icon: Icon(
-                  Ionicons.home,
+                  currentIndex == 0 ? Ionicons.home : Ionicons.home_outline,
                   color: currentIndex == 0 ? ColorModel.primaryRed : ColorModel.majorText
                 ),
               ),
@@ -46,34 +46,7 @@ class WrapperPage extends StatelessWidget {
                   showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return Container(
-                      height: 112,
-                      margin: EdgeInsets.only(bottom: 20),
-                      width: double.infinity,
-                      child: ListView(
-                        children: ListTile.divideTiles(
-                          context: context,
-                            tiles: [
-                              ListTile(
-                                contentPadding: EdgeInsets.symmetric(
-                                  vertical: Spacers.s4,
-                                  horizontal: Spacers.m24,
-                                ),
-                                title: Text("Buat resep manual",
-                                    style: Font.textMRegular),
-                              ),
-                              ListTile(
-                                contentPadding: EdgeInsets.symmetric(
-                                  vertical: Spacers.s4,
-                                  horizontal: Spacers.m24,
-                                ),
-                                title: Text(
-                                    "Buat resep otomatis (Instagram / foto)",
-                                    style: Font.textMRegular),
-                              ),
-                            ]
-                          ).toList(),
-                      ));
+                      return CreateRecipeBottomsheet();
                     }
                   );
                 },
@@ -87,7 +60,7 @@ class WrapperPage extends StatelessWidget {
                   context.read<PageCubit>().setPage(1);
                 },
                 icon: Icon(
-                  Ionicons.document_text_outline,
+                  currentIndex == 1 ? Ionicons.document_text : Ionicons.document_text_outline,
                   color: currentIndex == 1 ? ColorModel.primaryRed : ColorModel.majorText
                 ),
               ),
