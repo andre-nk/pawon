@@ -1,7 +1,7 @@
 part of "pages.dart";
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({ Key? key }) : super(key: key);
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -10,11 +10,10 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
-
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
-    Widget googleButton(){
+    Widget googleButton() {
       return Column(
         children: [
           SizedBox(height: Spacers.l32),
@@ -29,31 +28,15 @@ class _SignInPageState extends State<SignInPage> {
             isMinified: false,
             isGoogleButton: true,
             isCTA: true,
-            onPressed: (){
-              showDialog(
-                context: context,
-                builder: (context){
-                  return CustomDialog(
-                    title: "Batalkan pembuatan resep?",
-                    content: "Kamu belum selesai membuat resep baru, jika kamu mau kembali ke Beranda, informasi resep ini akan terhapus.",
-                    negativeText: "Kembali",
-                    positiveText: "Lanjutkan",
-                    negativeFunction: (){
-                      Navigator.pop(context);
-                    },
-                    positiveFunction: (){
-                      Navigator.pop(context);
-                    },
-                  );
-                }
-              );
+            onPressed: () {
+              context.read<AuthCubit>().signInWithGoogle();
             }
           )
         ],
       );
     }
 
-    Widget title(){
+    Widget title() {
       return Column(
         children: [
           Text(
@@ -66,13 +49,21 @@ class _SignInPageState extends State<SignInPage> {
       );
     }
 
-    Widget forms(){
+    Widget forms() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          CustomForms(isSearchForm: false, placeholder: "E-mail kamu", controller: emailController, isObscured: false),
+          CustomForms(
+              isSearchForm: false,
+              placeholder: "E-mail kamu",
+              controller: emailController,
+              isObscured: false),
           SizedBox(height: Spacers.l28),
-          CustomForms(isSearchForm: false, placeholder: "Kata sandi kamu", controller: passwordController, isObscured: true),
+          CustomForms(
+              isSearchForm: false,
+              placeholder: "Kata sandi kamu",
+              controller: passwordController,
+              isObscured: true),
           SizedBox(height: Spacers.l28),
           Container(
             width: double.infinity,
@@ -81,32 +72,38 @@ class _SignInPageState extends State<SignInPage> {
               isMinified: false,
               isGoogleButton: false,
               isCTA: false,
-              onPressed: (){
-                Navigator.push(context, PageTransition(child: WrapperPage(), type: PageTransitionType.rightToLeftWithFade));
+              onPressed: () {
+                context.read<AuthCubit>().signIn(
+                  email: emailController.text,
+                  password: passwordController.text
+                );
               }
-            ),
+            )
           ),
           SizedBox(height: Spacers.m16),
-          Text(
-            "Lupa kata sandi?",
-            style: Font.incLRegular
-          ),
+          Text("Lupa kata sandi?", style: Font.incLRegular),
           googleButton(),
           SizedBox(height: Spacers.l32),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, PageTransition(child: SignUpPage(), type: PageTransitionType.rightToLeftWithFade));
+            onTap: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: SignUpPage(),
+                      type: PageTransitionType.rightToLeftWithFade));
             },
             child: Align(
               alignment: Alignment.center,
               child: RichText(
                 text: TextSpan(
-                  style: Font.incLRegular.copyWith(
-                    color: ColorModel.majorText
-                  ),
+                  style: Font.incLRegular.copyWith(color: ColorModel.majorText),
                   children: <TextSpan>[
                     TextSpan(text: 'Belum punya akun? '),
-                    TextSpan(text: 'Daftar dulu!', style: TextStyle(fontWeight: FontWeight.bold, color: ColorModel.majorText)),
+                    TextSpan(
+                        text: 'Daftar dulu!',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: ColorModel.majorText)),
                   ],
                 ),
               ),
@@ -118,18 +115,40 @@ class _SignInPageState extends State<SignInPage> {
 
     return Scaffold(
       backgroundColor: ColorModel.kWhite,
-      body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(
-            vertical: 120,
-            horizontal: 40,
-          ),
-          children: [
-            title(),
-            SizedBox(height: 52),
-            forms()
-          ],
-        ),
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if(state is AuthSuccess){
+            Navigator.push(
+              context,
+              PageTransition(
+                child: WrapperPage(),
+                type: PageTransitionType.rightToLeftWithFade
+              )
+            );
+          } else if (state is AuthFailed){
+            //TODO: CUSTOM ERROR SNACKBAR
+            print(state.error);
+          }
+        },
+        builder: (context, state) {
+          if(state is AuthLoading){
+            return SafeArea(
+              child: Center(
+                child: CircularProgressIndicator()
+              )
+            );
+          } else {
+            return SafeArea(
+              child: ListView(
+                padding: EdgeInsets.symmetric(
+                  vertical: 120,
+                  horizontal: 40,
+                ),
+                children: [title(), SizedBox(height: 52), forms()],
+              ),
+            );
+          }
+        },
       )
     );
   }

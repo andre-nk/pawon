@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:pawon/cubit/auth_cubit.dart';
 import 'package:pawon/cubit/page_cubit.dart';
 import 'package:pawon/shared/shared.dart';
 import 'package:pawon/ui/widgets/widgets.dart';

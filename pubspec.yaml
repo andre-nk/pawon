@@ -10,16 +10,20 @@ environment:
 
 dependencies:
   animate_do: ^2.0.0
+  cloud_firestore: ^2.5.2
   cupertino_icons: ^1.0.2
   device_preview: ^0.7.4
   dotted_border: ^2.0.0+1
+  equatable: ^2.0.3
   firebase: ^9.0.1
+  firebase_auth: ^3.1.1
   firebase_core: ^1.6.0
   flutter:
     sdk: flutter
   flutter_bloc: ^7.1.0
   flutter_hex_color: ^2.0.0
   google_fonts: ^2.1.0
+  google_sign_in: ^5.1.0
   ionicons: ^0.1.2
   page_transition: ^2.0.2
   simple_animations: ^3.1.1
