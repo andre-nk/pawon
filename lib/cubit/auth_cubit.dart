@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:pawon/models/models.dart';
 import 'package:pawon/services/services.dart';
 
 part 'auth_state.dart';
 
-class AuthCubit extends Cubit<AuthState> {
+class AuthCubit extends Cubit<AuthState> with HydratedMixin {
   AuthCubit() : super(AuthInitial());
 
   void signUp({required String name, required String email, required String password}) async {
@@ -77,6 +78,33 @@ class AuthCubit extends Cubit<AuthState> {
       emit(NotAuthenticated());
     } catch (e){
       emit(AuthFailed(e.toString()));
+    }
+  }
+
+  @override
+  AuthState? fromJson(Map<String, dynamic> json) {
+    try {
+      if(json["status"] != null){
+        return NotAuthenticated();
+      } else {
+        final userModel = UserModel.fromJson(json);
+        return AuthSuccess(userModel);
+      }
+    } catch (e) {
+      return AuthFailed(e.toString());
+    }
+  }
+
+  @override
+  Map<String, dynamic>? toJson(AuthState state) {
+    if(state is AuthSuccess){
+      return state.user.toJson(state.user);
+    } else if (state is NotAuthenticated) {
+      return {
+        "status": "Not Authenticated"
+      };
+    } else {
+      return null;
     }
   }
 }

@@ -116,7 +116,7 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       backgroundColor: ColorModel.kWhite,
       body: BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
+        listener: (context, state){
           if(state is AuthSuccess){
             Navigator.push(
               context,
@@ -126,8 +126,15 @@ class _SignInPageState extends State<SignInPage> {
               )
             );
           } else if (state is AuthFailed){
-            //TODO: CUSTOM ERROR SNACKBAR
-            print(state.error);
+            ScaffoldMessenger.of(context).showSnackBar(
+              customSnackBar(
+                content: state.error,
+                icon: Icon(
+                  Ionicons.alert_circle_outline,
+                  color: ColorModel.primaryRed,
+                ),
+              )
+            );
           }
         },
         builder: (context, state) {

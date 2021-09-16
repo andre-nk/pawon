@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
               content: "Mulai masak (est. ±55 menit)",
               isMinified: true,
               isGoogleButton: false,
-              isCTA: true,
+              isCTA: false,
               onPressed: (){}
             ),
           )
