@@ -128,11 +128,7 @@ class _SignUpPageState extends State<SignUpPage> {
         },
         builder: (context, state) {
           if(state is AuthLoading){
-            return SafeArea(
-              child: Center(
-                child: CircularProgressIndicator()
-              )
-            );
+            return CustomLoaderPage();
           } else {
             return SafeArea(
               child: ListView(

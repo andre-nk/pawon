@@ -38,6 +38,7 @@ class AuthService{
         uid: userCredential.user!.uid,
         email: email,
         name: userCredential.user!.displayName ?? "",
+        profileURL: userCredential.user!.photoURL ?? "",
         password: password,
         history: [],
         plans: [],
@@ -62,6 +63,7 @@ class AuthService{
         uid: userCredential.user!.uid,
         email: userCredential.user!.email ?? "",
         name: userCredential.user!.displayName ?? "",
+        profileURL: userCredential.user!.photoURL ?? "",
         password: "",
         history: [],
         plans: [],
@@ -70,6 +72,14 @@ class AuthService{
       
       await UserService().createUser(user);
       return user;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
       throw e;
     }

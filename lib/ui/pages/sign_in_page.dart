@@ -81,7 +81,12 @@ class _SignInPageState extends State<SignInPage> {
             )
           ),
           SizedBox(height: Spacers.m16),
-          Text("Lupa kata sandi?", style: Font.incLRegular),
+          GestureDetector(
+            child: Text("Lupa kata sandi?", style: Font.incLRegular),
+            onTap: (){
+              Navigator.of(context).push(PageTransition(child: ForgotPasswordPage(), type: PageTransitionType.rightToLeftWithFade));
+            }
+          ),
           googleButton(),
           SizedBox(height: Spacers.l32),
           GestureDetector(
@@ -139,11 +144,7 @@ class _SignInPageState extends State<SignInPage> {
         },
         builder: (context, state) {
           if(state is AuthLoading){
-            return SafeArea(
-              child: Center(
-                child: CircularProgressIndicator()
-              )
-            );
+            return CustomLoaderPage();
           } else {
             return SafeArea(
               child: ListView(

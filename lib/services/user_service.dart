@@ -10,8 +10,27 @@ class UserService{
         'email': user.email,
         'history': user.history,
         'plans': user.plans,
-        'recipes': user.recipes
+        'recipes': user.recipes,
+        'profileURL': user.profileURL != "" ? user.profileURL : ""
       });
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<UserModel> getUserById(String id) async {
+    try {
+      DocumentSnapshot snapshot = await userReference.doc(id).get();
+      return UserModel(
+        uid: id,
+        password: "",
+        name: snapshot["name"],
+        email: snapshot["email"],
+        profileURL: snapshot["profileURL"],
+        recipes: snapshot["recipes"].cast<String>(),
+        plans: snapshot["plans"].cast<String>(),
+        history: snapshot["history"].cast<String>()
+      );
     } catch (e) {
       throw e;
     }

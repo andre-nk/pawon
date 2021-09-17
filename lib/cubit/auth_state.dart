@@ -28,3 +28,5 @@ class AuthFailed extends AuthState {
 }
 
 class NotAuthenticated extends AuthState {}
+
+class PasswordResetSent extends AuthState {}

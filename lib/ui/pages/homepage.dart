@@ -1,14 +1,13 @@
 part of "pages.dart";
 
 class HomePage extends StatefulWidget {
-  const HomePage({ Key? key }) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with AnimationMixin {
-
   late Animation<double> searchOpacity;
   late Animation<double> searchOffset;
 
@@ -21,11 +20,10 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
 
   @override
   Widget build(BuildContext context) {
-
     final ScrollController _scrollController = ScrollController();
     final TextEditingController _searchController = TextEditingController();
 
-    Widget header(){
+    Widget header({required String name, required String profileURL}) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -33,192 +31,197 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Halo, Dewi!",
+                "Halo, $name!",
                 style: Font.headingS,
               ),
-              SizedBox(height: Spacers.s4,),
+              SizedBox(
+                height: Spacers.s4,
+              ),
               Text(
                 "mau masak apa hari ini?",
                 style: Font.incLMedium,
               )
             ],
           ),
-          Row(
-            children: [
-              IconButton(
-                tooltip: "Notifikasi",
-                padding: EdgeInsets.zero,
-                onPressed: (){},
-                icon: Stack(
-                  children: [
-                    Icon(
-                      Ionicons.notifications_outline,
-                      color: ColorModel.majorText
-                    ),
-                    Positioned(
-                      right: 5,
-                      top: 5,
-                      child: Container(
-                        height: 5,
-                        width: 5,
-                        decoration: BoxDecoration(
-                          color: ColorModel.activeRed,
-                          shape: BoxShape.circle
-                        ),
+          Row(children: [
+            IconButton(
+              tooltip: "Notifikasi",
+              padding: EdgeInsets.zero,
+              onPressed: () {},
+              icon: Stack(
+                children: [
+                  Icon(Ionicons.notifications_outline,
+                      color: ColorModel.majorText),
+                  Positioned(
+                    right: 5,
+                    top: 5,
+                    child: Container(
+                      height: 5,
+                      width: 5,
+                      decoration: BoxDecoration(
+                        color: ColorModel.activeRed, shape: BoxShape.circle,
                       ),
-                    )
-                  ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(width: Spacers.m24),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    child: ProfilePage(),
+                    type: PageTransitionType.rightToLeftWithFade
+                  )
+                );
+              },
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: ColorModel.disabledRed,
+                  borderRadius: Spacers.borderRadius,
+                  image: DecorationImage(
+                    image: NetworkImage(profileURL),
+                  )
                 ),
               ),
-              SizedBox(width: Spacers.m24),
-              GestureDetector(
-                onTap: (){
-                  Navigator.push(context, PageTransition(child: ProfilePage(), type: PageTransitionType.rightToLeftWithFade));
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: ColorModel.disabledRed,
-                    borderRadius: Spacers.borderRadius
-                  ),
-                ),
-              )
-            ]
-          )
+            )
+          ])
         ],
       );
     }
 
-    Widget todayPlan(){
+    Widget todayPlan() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Hari ini",
-            style: Font.textMRegular.copyWith(
-              color: ColorModel.kText
-            )
-          ),
+          Text("Hari ini",
+              style: Font.textMRegular.copyWith(color: ColorModel.kText)),
           SizedBox(height: Spacers.s12),
           Container(
-            height: 200,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(color: ColorModel.kBorder)
-              )
-            ),
-            child: ListView.separated(
-              itemCount: 5,
-              separatorBuilder: (context, index){
-                return Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: ColorModel.kBorder,
-                );
-              },
-              itemBuilder: (context, index){
-                return DualListTile(title: "Ayam Cabe Garam", trailing: "${index + 1} porsi");
-              },
-            )
-          ),
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  border: Border(top: BorderSide(color: ColorModel.kBorder))),
+              child: ListView.separated(
+                itemCount: 5,
+                separatorBuilder: (context, index) {
+                  return Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: ColorModel.kBorder,
+                  );
+                },
+                itemBuilder: (context, index) {
+                  return DualListTile(
+                      title: "Ayam Cabe Garam", trailing: "${index + 1} porsi");
+                },
+              )),
           SizedBox(height: Spacers.s12),
           Align(
             alignment: Alignment.center,
             child: PrimaryButton(
-              content: "Mulai masak (est. ±55 menit)",
-              isMinified: true,
-              isGoogleButton: false,
-              isCTA: false,
-              onPressed: (){}
-            ),
+                content: "Mulai masak (est. ±55 menit)",
+                isMinified: true,
+                isGoogleButton: false,
+                isCTA: false,
+                onPressed: () {}),
           )
         ],
       );
     }
 
-    Widget userRecipes(){
+    Widget userRecipes() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Resep kamu",
-            style: Font.textMRegular.copyWith(
-              color: ColorModel.kText
-            )
-          ),
+          Text("Resep kamu",
+              style: Font.textMRegular.copyWith(color: ColorModel.kText)),
           SizedBox(height: Spacers.s12),
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(color: ColorModel.kBorder)
-              )
-            ),
+                border: Border(top: BorderSide(color: ColorModel.kBorder))),
             child: Column(
-              children: List.generate(20, (index){
-                return PhotoListTile(
-                  title: "Ayam Cabe Garam",
-                  subtitle: "${(1) * 5} menit; ${1 * 7}x dimasak",
-                );
-              })
-            )
-          ),
+                children: List.generate(20, (index) {
+              return PhotoListTile(
+                title: "Ayam Cabe Garam",
+                subtitle: "${(1) * 5} menit; ${1 * 7}x dimasak",
+              );
+            }))),
         ],
       );
     }
 
     return Scaffold(
       backgroundColor: ColorModel.kWhite,
-      body: SafeArea(
-        child: NotificationListener(
-          onNotification: (t) {
-            if (t is ScrollEndNotification) {
-              if(_scrollController.position.pixels >= MediaQuery.of(context).size.height * 0.15){
-                controller.play(duration: 250.milliseconds);
-              } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward){
-                controller.playReverse(duration: 250.milliseconds);
-              }
-            }
-            return true;
-          },
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                controller: _scrollController,
-                child: Padding(
-                  padding: EdgeInsets.all(Spacers.l32),
-                  child: Column(
-                    children:[
-                      header(),
-                      SizedBox(height: Spacers.l28),
-                      todayPlan(),
-                      SizedBox(height: Spacers.m24),
-                      userRecipes(),
-                    ] 
-                  ),
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if(state is AuthFailed){
+            print(state.error);
+          }
+        },
+        builder: (context, state){
+          if(state is AuthSuccess){
+            return SafeArea(
+              child: NotificationListener(
+                onNotification: (t) {
+                  if (t is ScrollEndNotification) {
+                    if (_scrollController.position.pixels >=
+                        MediaQuery.of(context).size.height * 0.15) {
+                      controller.play(duration: 250.milliseconds);
+                    } else if (_scrollController.position.userScrollDirection ==
+                        ScrollDirection.forward) {
+                      controller.playReverse(duration: 250.milliseconds);
+                    }
+                  }
+                  return true;
+                },
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: EdgeInsets.all(Spacers.l32),
+                        child: Column(children: [
+                          header(
+                            name: state.user.name.split(" ")[0].trim(),
+                            profileURL: state.user.profileURL
+                          ),
+                          SizedBox(height: Spacers.l28),
+                          todayPlan(),
+                          SizedBox(height: Spacers.m24),
+                          userRecipes(),
+                        ]),
+                      ),
+                    ),
+                    searchOpacity.value == 0.0
+                    ? SizedBox()
+                    : Positioned(
+                        child: Opacity(
+                          opacity: searchOpacity.value,
+                          child: Padding(
+                            padding: EdgeInsets.all(Spacers.l32),
+                            child: CustomForms(
+                              isSearchForm: true,
+                              placeholder: "Cari resep kamu disini",
+                              controller: _searchController,
+                              isObscured: false
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              searchOpacity.value == 0.0
-              ? SizedBox()
-              : Positioned(
-                child: Opacity(
-                  opacity: searchOpacity.value,
-                  child: Padding(
-                    padding: EdgeInsets.all(Spacers.l32),
-                    child: CustomForms(
-                      isSearchForm: true,
-                      placeholder: "Cari resep kamu disini",
-                      controller: _searchController,
-                      isObscured: false
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
+            );
+          } else {
+            return SizedBox();
+          }
+        },
       )
     );
   }

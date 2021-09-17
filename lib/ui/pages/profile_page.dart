@@ -17,19 +17,18 @@ class ProfilePage extends StatelessWidget {
       );
     }
 
-    Widget settingsTile() {
+    Widget settingsTile(String name, String email) {
       return Container(
-          child: Column(
+        child: Column(
         children: [
           ListTile(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
+              contentPadding: EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
               title: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text("Nama", style: Font.textLRegular),
                   SizedBox(width: Spacers.m16),
-                  Text("Dewi Rosdiana",
+                  Text("$name",
                       overflow: TextOverflow.ellipsis,
                       style:
                           Font.incLRegular.copyWith(color: ColorModel.kText)),
@@ -48,7 +47,7 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   Text("E-mail", style: Font.textLRegular),
                   SizedBox(width: Spacers.m16),
-                  Text("elisabeth.d.rosdiana10@gmail.com",
+                  Text("$email",
                       overflow: TextOverflow.ellipsis,
                       style:
                           Font.incLRegular.copyWith(color: ColorModel.kText)),
@@ -116,7 +115,6 @@ class ProfilePage extends StatelessWidget {
               isMinified: false,
               isCTA: false,
               onPressed: () {
-                //TODO: DIFFER GOOGLE OR E-MAIL PROVIDER
                 context.read<AuthCubit>().signOut();
               }
             ),
@@ -151,41 +149,42 @@ class ProfilePage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-            if(state is AuthLoading){
-              return SafeArea(
-                child: Center(
-                  child: CircularProgressIndicator()
-                )
-              );
-            } else {
-              return Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(Spacers.m24),
-                child: ListView(
-                  children: [
-                    SizedBox(height: 56),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: 55,
-                        width: 55,
-                        decoration: BoxDecoration(
-                            color: ColorModel.disabledRed,
-                            borderRadius: Spacers.borderRadius),
+          if(state is AuthSuccess){
+            return Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(Spacers.m24),
+              child: ListView(
+                children: [
+                  SizedBox(height: 56),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 55,
+                      width: 55,
+                      decoration: BoxDecoration(
+                        color: ColorModel.disabledRed,
+                        borderRadius: Spacers.borderRadius,
+                        image: DecorationImage(
+                          image: NetworkImage(state.user.profileURL),
+                        )
                       ),
                     ),
-                    SizedBox(height: 56),
-                    settingsTile(),
-                    SizedBox(height: 56),
-                    signOutButton(),
-                    SizedBox(height: Spacers.m24),
-                  ],
-                )
-              );
-            }
-          
-        
-  }
+                  ),
+                  SizedBox(height: 56),
+                  settingsTile(
+                    state.user.name,
+                    state.user.email
+                  ),
+                  SizedBox(height: 56),
+                  signOutButton(),
+                  SizedBox(height: Spacers.m24),
+                ],
+              )
+            );
+          } else {
+            return CustomLoaderPage();
+          }
+        }
       )
     );
   }

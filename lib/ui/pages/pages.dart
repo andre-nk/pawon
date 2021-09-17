@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,3 +28,5 @@ part 'ingredient_page.dart';
 part 'instructions_page.dart';
 part 'create_recipe_page.dart';
 part 'history_page.dart';
+part 'forgot_password_page.dart';
+part 'custom_loader_page.dart';

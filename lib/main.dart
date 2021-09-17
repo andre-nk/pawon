@@ -40,8 +40,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           splashColor: ColorModel.disabledRed,
           colorScheme: ColorScheme.fromSwatch(
-                  primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color))
-              .copyWith(
+            primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color))
+            .copyWith(
             primary: ColorModel.primaryRed.withOpacity(0.75),
             secondary: ColorModel.primaryRed.withOpacity(0.75),
           ),
@@ -50,9 +50,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
-
             print(state);
-
             if(state is AuthSuccess){
               return WrapperPage();
             } else {

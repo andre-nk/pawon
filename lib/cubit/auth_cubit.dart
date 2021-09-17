@@ -19,8 +19,8 @@ class AuthCubit extends Cubit<AuthState> with HydratedMixin {
         emit(AuthFailed("Please enter a proper e-mail address"));
       } else if(password.length == 0){
         emit(AuthFailed("Please enter your password before sign up"));
-      } else if(password.length <= 6){
-        emit(AuthFailed("Your password must be more than 6 characters"));
+      } else if(password.length < 6){
+        emit(AuthFailed("Your password must be more than 5 characters"));
       } else {  
         UserModel user = await AuthService().signUp(email: email, name: name, password: password);
         emit(AuthSuccess(user));
@@ -39,8 +39,8 @@ class AuthCubit extends Cubit<AuthState> with HydratedMixin {
         emit(AuthFailed("Please enter a proper e-mail address"));
       } else if(password.length == 0){
         emit(AuthFailed("Please enter your password to log in"));
-      } else if(password.length <= 6){
-        emit(AuthFailed("Your password must be more than 6 characters"));
+      } else if(password.length < 6){
+        emit(AuthFailed("Your password must be more than 5 characters"));
       } else {
         UserModel user = await AuthService().signIn(email: email, password: password);
         emit(AuthSuccess(user));
@@ -77,6 +77,31 @@ class AuthCubit extends Cubit<AuthState> with HydratedMixin {
       await AuthService().signOutWithGoogle();
       emit(NotAuthenticated());
     } catch (e){
+      emit(AuthFailed(e.toString()));
+    }
+  }
+
+  void resetPassword(String email) async {
+    try {
+      emit(AuthLoading());
+
+      if(email.indexOf("@") < 0 || email.isEmpty){
+        emit(AuthFailed("Please enter a proper e-mail address"));
+      } else {
+        await AuthService().resetPassword(email);
+        emit(PasswordResetSent());
+      }
+    } catch (e) {
+      emit(AuthFailed(e.toString()));
+    }
+  }
+
+  void getUserById(String id) async {
+    try {
+      emit(AuthLoading());
+      UserModel user = await UserService().getUserById(id);
+      emit(AuthSuccess(user));
+    } catch (e) {
       emit(AuthFailed(e.toString()));
     }
   }
