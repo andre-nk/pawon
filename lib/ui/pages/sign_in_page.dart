@@ -84,7 +84,9 @@ class _SignInPageState extends State<SignInPage> {
           GestureDetector(
             child: Text("Lupa kata sandi?", style: Font.incLRegular),
             onTap: (){
-              Navigator.of(context).push(PageTransition(child: ForgotPasswordPage(), type: PageTransitionType.rightToLeftWithFade));
+              Navigator.of(context).push(PageTransition(child: ChangePasswordPage(
+                isForgot: true
+              ), type: PageTransitionType.rightToLeftWithFade));
             }
           ),
           googleButton(),

@@ -1,10 +1,21 @@
 part of "pages.dart";
 
-class ForgotPasswordPage extends StatelessWidget {
-  const ForgotPasswordPage({ Key? key }) : super(key: key);
-
+class ChangeNamePage extends StatelessWidget {
+  const ChangeNamePage({ Key? key }) : super(key: key);
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
+
+    PreferredSize customAppBar() {
+      return PreferredSize(
+        child: CustomAppBar(
+        title: "",
+        leftButton: "Kembali",
+        leftButtonMethod: () {
+          Navigator.pop(context);
+        }),
+        preferredSize: Size.fromHeight(68.0),
+      );
+    }
 
     Widget title() {
       return Column(
@@ -14,7 +25,7 @@ class ForgotPasswordPage extends StatelessWidget {
             style: Font.headingL,
           ),
           SizedBox(height: Spacers.s8),
-          Text("Lupa kata sandi kamu?", style: Font.incXLMedium)
+          Text("Ubah nama pengguna kamu?", style: Font.incXLMedium)
         ],
       );
     }
@@ -25,19 +36,19 @@ class ForgotPasswordPage extends StatelessWidget {
         children: [
           CustomForms(
               isSearchForm: false,
-              placeholder: "E-mail kamu",
-              controller: emailController,
+              placeholder: "Nama pengguna baru",
+              controller: nameController,
               isObscured: false),
           SizedBox(height: Spacers.l28),
           Container(
             width: double.infinity,
             child: PrimaryButton(
-              content: "Setel ulang kata sandi",
+              content: "Ubah nama pengguna",
               isMinified: false,
               isGoogleButton: false,
               isCTA: false,
               onPressed: () {
-                context.read<AuthCubit>().resetPassword(emailController.text);
+                context.read<AuthCubit>().changeDisplayName(nameController.text);
               }
             )
           ),
@@ -47,27 +58,21 @@ class ForgotPasswordPage extends StatelessWidget {
     }
 
     return Scaffold(
+      appBar: customAppBar(),
       backgroundColor: ColorModel.kWhite,
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state){
-          if(state is PasswordResetSent){
+          if(state is AuthSuccess){
             ScaffoldMessenger.of(context).showSnackBar(
               customSnackBar(
-                content: "Link kata sandi telah dikirim ke email kamu",
+                content: "Nama pengguna berhasil diubah",
                 icon: Icon(
                   Ionicons.information_circle_outline,
                   color: ColorModel.kBlue,
                 ),
               )
             );
-            Navigator.pushAndRemoveUntil(
-              context,
-              PageTransition(
-                child: SignInPage(),
-                type: PageTransitionType.rightToLeftWithFade
-              ),
-              (route) => false
-            );
+            Navigator.pop(context);
           } else if (state is AuthFailed){
             ScaffoldMessenger.of(context).showSnackBar(
               customSnackBar(

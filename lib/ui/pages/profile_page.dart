@@ -22,77 +22,88 @@ class ProfilePage extends StatelessWidget {
         child: Column(
         children: [
           ListTile(
-              contentPadding: EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
-              title: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text("Nama", style: Font.textLRegular),
-                  SizedBox(width: Spacers.m16),
-                  Text("$name",
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          Font.incLRegular.copyWith(color: ColorModel.kText)),
-                ],
-              ),
-              trailing: Icon(
-                Ionicons.chevron_forward,
-                color: ColorModel.kText,
-                size: 20,
-              )),
+            onTap: (){
+              Navigator.push(context, PageTransition(child: ChangeNamePage(), type: PageTransitionType.rightToLeftWithFade));
+            },
+            contentPadding: EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text("Nama", style: Font.textLRegular),
+                SizedBox(width: Spacers.m16),
+                Text("$name",
+                  overflow: TextOverflow.ellipsis,
+                  style: Font.incLRegular.copyWith(color: ColorModel.kText)
+                ),
+              ],
+            ),
+            trailing: Icon(
+              Ionicons.chevron_forward,
+              color: ColorModel.kText,
+              size: 20,
+            )
+          ),
           ListTile(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
-              title: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text("E-mail", style: Font.textLRegular),
-                  SizedBox(width: Spacers.m16),
-                  Text("$email",
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          Font.incLRegular.copyWith(color: ColorModel.kText)),
-                ],
-              ),
-              trailing: Icon(
-                Ionicons.chevron_forward,
-                color: ColorModel.kText,
-                size: 20,
-              )),
+            contentPadding: EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text("E-mail", style: Font.textLRegular),
+                SizedBox(width: Spacers.m16),
+                Text(
+                  "$email",
+                  overflow: TextOverflow.ellipsis,
+                  style: Font.incLRegular.copyWith(color: ColorModel.kText)
+                ),
+              ],
+            ),
+            trailing: Icon(
+              Ionicons.chevron_forward,
+              color: ColorModel.kText,
+              size: 20,
+            )
+          ),
           ListTile(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
-              title: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text("Kata sandi", style: Font.textLRegular),
-                  SizedBox(width: Spacers.m16),
-                  Text("*************",
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          Font.incLRegular.copyWith(color: ColorModel.kText)),
-                ],
-              ),
-              trailing: Icon(
-                Ionicons.chevron_forward,
-                color: ColorModel.kText,
-                size: 20,
-              )),
+            onTap: (){
+               Navigator.push(context, PageTransition(child: ChangePasswordPage(isForgot: false), type: PageTransitionType.rightToLeftWithFade));
+            },
+            contentPadding: EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text("Kata sandi", style: Font.textLRegular),
+                SizedBox(width: Spacers.m16),
+                Text(
+                  "*************",
+                  overflow: TextOverflow.ellipsis,
+                  style: Font.incLRegular.copyWith(color: ColorModel.kText)
+                ),
+              ],
+            ),
+            trailing: Icon(
+              Ionicons.chevron_forward,
+              color: ColorModel.kText,
+              size: 20,
+            )
+          ),
           ListTile(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: HistoryPage(),
-                        type: PageTransitionType.rightToLeftWithFade));
-              },
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
-              title: Text("Riwayat Masak", style: Font.textLRegular),
-              trailing: Icon(
-                Ionicons.chevron_forward,
-                color: ColorModel.kText,
-                size: 20,
-              )),
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  child: HistoryPage(),
+                  type: PageTransitionType.rightToLeftWithFade
+                )
+              );
+            },
+            contentPadding: EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
+            title: Text("Riwayat Masak", style: Font.textLRegular),
+            trailing: Icon(
+              Ionicons.chevron_forward,
+              color: ColorModel.kText,
+              size: 20,
+            )
+          ),
           ListTile(
             contentPadding:
                 EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),

@@ -106,6 +106,16 @@ class AuthCubit extends Cubit<AuthState> with HydratedMixin {
     }
   }
 
+  void changeDisplayName(String name) async {
+    try {
+      emit(AuthLoading());
+      UserModel user = await UserService().changeDisplayName(name);
+      emit(AuthSuccess(user));
+    } catch (e) {
+      emit(AuthFailed(e.toString()));
+    }
+  }
+
   @override
   AuthState? fromJson(Map<String, dynamic> json) {
     try {

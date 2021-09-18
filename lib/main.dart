@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: ThemeData(
-          splashColor: ColorModel.disabledRed,
+          splashColor: ColorModel.disabledRed.withOpacity(0.5),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: MaterialColor(0xFFE7973F, ColorModel.color))
             .copyWith(

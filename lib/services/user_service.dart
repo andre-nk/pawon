@@ -35,4 +35,31 @@ class UserService{
       throw e;
     }
   }
+
+
+  Future<UserModel> changeDisplayName(String name) async {
+    try {
+      String id = FirebaseAuth.instance.currentUser!.uid;
+      
+      await userReference.doc(id).update({
+        "name": name
+      });
+
+      await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
+
+      DocumentSnapshot snapshot = await userReference.doc(id).get();
+      return UserModel(
+        uid: id,
+        password: "",
+        name: snapshot["name"],
+        email: snapshot["email"],
+        profileURL: snapshot["profileURL"],
+        recipes: snapshot["recipes"].cast<String>(),
+        plans: snapshot["plans"].cast<String>(),
+        history: snapshot["history"].cast<String>()
+      );
+    } catch (e) {
+      throw e;
+    }
+  }
 }
