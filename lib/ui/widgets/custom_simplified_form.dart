@@ -32,7 +32,7 @@ class CustomSimplifiedForm extends StatelessWidget {
       )
     : Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(this.title, style: Font.incLRegular),
           Spacer(),

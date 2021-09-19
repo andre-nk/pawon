@@ -17,6 +17,7 @@ class CreateRecipeBottomsheet extends StatelessWidget {
           tiles: [
             ListTile(
               onTap: (){
+                Navigator.pop(context);
                 Navigator.push(context, PageTransition(child: CreateRecipePage(), type: PageTransitionType.rightToLeftWithFade));
               },
               contentPadding: EdgeInsets.symmetric(

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pawon/models/models.dart';
 import 'package:pawon/services/services.dart';
 
@@ -111,6 +112,21 @@ class AuthCubit extends Cubit<AuthState> with HydratedMixin {
       emit(AuthLoading());
       UserModel user = await UserService().changeDisplayName(name);
       emit(AuthSuccess(user));
+    } catch (e) {
+      emit(AuthFailed(e.toString()));
+    }
+  }
+
+  void changeProfilePicture(ImageSource source) async {
+    try {
+      emit(AuthLoading());
+      XFile? _result = await ImageService().pickImage(source);
+      if(_result != null){
+        UserModel user = await UserService().changeProfilePicture(_result);
+        emit(AuthSuccess(user));
+      } else {
+        emit(AuthFailed("You've cancel the image picking process"));
+      }
     } catch (e) {
       emit(AuthFailed(e.toString()));
     }

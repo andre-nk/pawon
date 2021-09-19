@@ -17,6 +17,75 @@ class ProfilePage extends StatelessWidget {
       );
     }
 
+    Widget profilePicture(String profileURL){
+      return GestureDetector(
+      onTap: (){
+        showModalBottomSheet(
+          context: context,
+          builder: (context){
+            return Container(
+              height: 112,
+              margin: EdgeInsets.only(
+                bottom: 20
+              ),
+              width: double.infinity,
+              child: ListView(
+                children: ListTile.divideTiles(
+                  context: context,
+                  tiles: [
+                    ListTile(
+                      onTap: (){
+                        context.read<AuthCubit>().changeProfilePicture(ImageSource.gallery);
+                        Navigator.pop(context);
+                      },
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: Spacers.s4,
+                        horizontal: Spacers.m24,
+                      ),
+                      title: Text(
+                        "Pilih foto dari Galeri",
+                        style: Font.textMRegular
+                      ),
+                    ),
+                    ListTile(
+                      onTap: (){
+                        context.read<AuthCubit>().changeProfilePicture(ImageSource.camera);
+                        Navigator.pop(context);
+                      },
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: Spacers.s4,
+                        horizontal: Spacers.m24,
+                      ),
+                      title: Text(
+                        "Ambil foto dari Kamera",
+                        style: Font.textMRegular
+                      ),
+                    ),
+                  ]
+                ).toList(),
+              )
+            );
+          }
+        );
+      },
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          height: 65,
+          width: 65,
+          decoration: BoxDecoration(
+            color: ColorModel.disabledRed,
+            borderRadius: Spacers.borderRadius,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(profileURL),
+            )
+          ),
+        ),
+      ),
+    );
+  }
+
     Widget settingsTile(String name, String email) {
       return Container(
         child: Column(
@@ -147,16 +216,16 @@ class ProfilePage extends StatelessWidget {
       appBar: customAppBar(),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          if(state is NotAuthenticated){
-            Navigator.push(
-              context,
-              PageTransition(
-                child: OnboardingPage(),
-                type: PageTransitionType.rightToLeftWithFade
+          if (state is AuthFailed){
+            ScaffoldMessenger.of(context).showSnackBar(
+              customSnackBar(
+                content: state.error,
+                icon: Icon(
+                  Ionicons.alert_circle_outline,
+                  color: ColorModel.primaryRed,
+                ),
               )
             );
-          } else if (state is AuthFailed){
-            print(state.error);
           }
         },
         builder: (context, state) {
@@ -167,20 +236,7 @@ class ProfilePage extends StatelessWidget {
               child: ListView(
                 children: [
                   SizedBox(height: 56),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 55,
-                      width: 55,
-                      decoration: BoxDecoration(
-                        color: ColorModel.disabledRed,
-                        borderRadius: Spacers.borderRadius,
-                        image: DecorationImage(
-                          image: NetworkImage(state.user.profileURL),
-                        )
-                      ),
-                    ),
-                  ),
+                  profilePicture(state.user.profileURL),
                   SizedBox(height: 56),
                   settingsTile(
                     state.user.name,

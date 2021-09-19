@@ -5,6 +5,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pawon/cubit/auth_cubit.dart';
 import 'package:pawon/cubit/page_cubit.dart';
+import 'package:pawon/cubit/recipe_cubit.dart';
 import 'package:pawon/shared/shared.dart';
 import 'package:pawon/ui/pages/pages.dart';
 
@@ -32,9 +33,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => PageCubit()),
-        BlocProvider(
-          create: (context) => AuthCubit(),
-        )
+        BlocProvider(create: (context) => AuthCubit()),
+        BlocProvider(create: (context) => RecipeCubit())
       ],
       child: MaterialApp(
         theme: ThemeData(
