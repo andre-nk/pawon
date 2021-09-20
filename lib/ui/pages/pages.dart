@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:pawon/cubit/auth_cubit.dart';
 import 'package:pawon/cubit/page_cubit.dart';
 import 'package:pawon/cubit/recipe_cubit.dart';
+import 'package:pawon/models/models.dart';
 import 'package:pawon/shared/shared.dart';
 import 'package:pawon/ui/widgets/widgets.dart';
 import 'package:simple_animations/simple_animations.dart';

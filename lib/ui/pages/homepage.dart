@@ -13,6 +13,7 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
 
   @override
   void initState() {
+    context.read<RecipeCubit>().fetchRecipes();
     searchOpacity = 0.0.tweenTo(1.0).animatedBy(controller);
     searchOffset = (-50.0).tweenTo(0.0).animatedBy(controller);
     super.initState();
@@ -59,7 +60,8 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
                       height: 5,
                       width: 5,
                       decoration: BoxDecoration(
-                        color: ColorModel.activeRed, shape: BoxShape.circle,
+                        color: ColorModel.activeRed,
+                        shape: BoxShape.circle,
                       ),
                     ),
                   )
@@ -70,24 +72,20 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
             GestureDetector(
               onTap: () {
                 Navigator.push(
-                  context,
-                  PageTransition(
-                    child: ProfilePage(),
-                    type: PageTransitionType.rightToLeftWithFade
-                  )
-                );
+                    context,
+                    PageTransition(
+                        child: ProfilePage(),
+                        type: PageTransitionType.rightToLeftWithFade));
               },
               child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: ColorModel.disabledRed,
-                  borderRadius: Spacers.borderRadius,
-                  image: DecorationImage(
-                    image: NetworkImage(profileURL),
-                  )
-                ),
-              ),
+                  clipBehavior: Clip.antiAlias,
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: ColorModel.disabledRed,
+                    borderRadius: Spacers.borderRadius,
+                  ),
+                  child: CachedNetworkImage(imageUrl: profileURL)),
             )
           ])
         ],
@@ -135,24 +133,61 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
     }
 
     Widget userRecipes() {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Resep kamu",
-              style: Font.textMRegular.copyWith(color: ColorModel.kText)),
-          SizedBox(height: Spacers.s12),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: ColorModel.kBorder))),
-            child: Column(
-                children: List.generate(20, (index) {
-              return PhotoListTile(
-                title: "Ayam Cabe Garam",
-                subtitle: "${(1) * 5} menit; ${1 * 7}x dimasak",
-              );
-            }))),
-        ],
+      return BlocConsumer<RecipeCubit, RecipeState>(
+        listener: (context, state) {
+          if(state is RecipeFailed){
+            ScaffoldMessenger.of(context).showSnackBar(
+              customSnackBar(
+                content: state.error,
+                icon: Icon(
+                  Ionicons.alert_circle_outline,
+                  color: ColorModel.primaryRed,
+                ),
+              )
+            );
+          }
+        },
+        builder: (context, state) {
+          if(state is RecipeLoaded){
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Resep kamu",
+                  style: Font.textMRegular.copyWith(color: ColorModel.kText)
+                ),
+                SizedBox(height: Spacers.s12),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(top: BorderSide(color: ColorModel.kBorder))
+                  ),
+                  child: StreamBuilder<List<RecipeModel>>(
+                    stream: state.recipes,
+                    builder: (context, snapshot) {
+                      if(snapshot.hasData){
+                        return Column(
+                          children: List.generate(snapshot.data!.length, (index) {
+                              return PhotoListTile(
+                                photoURL: snapshot.data![index].coverURL ?? "",
+                                title: snapshot.data![index].title,
+                                subtitle: "${snapshot.data![index].cookTime}; ${snapshot.data![index].cookedTime}x dimasak",
+                              );
+                            }
+                          )
+                        );
+                      } else {
+                        return SizedBox();
+                      }
+                    }
+                  )
+                ),
+              ],
+            );
+          } else {
+            return SizedBox();
+          }
+        },
       );
     }
 
@@ -160,21 +195,20 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
       backgroundColor: ColorModel.kWhite,
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          if(state is AuthFailed){
+          if (state is AuthFailed) {
             print(state.error);
           }
         },
-        builder: (context, state){
-          if(state is AuthSuccess){
+        builder: (context, state) {
+          if (state is AuthSuccess) {
             return SafeArea(
               child: NotificationListener(
                 onNotification: (t) {
                   if (t is ScrollEndNotification) {
                     if (_scrollController.position.pixels >=
-                        MediaQuery.of(context).size.height * 0.15) {
+                      MediaQuery.of(context).size.height * 0.15) {
                       controller.play(duration: 250.milliseconds);
-                    } else if (_scrollController.position.userScrollDirection ==
-                        ScrollDirection.forward) {
+                    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
                       controller.playReverse(duration: 250.milliseconds);
                     }
                   }
@@ -209,8 +243,7 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
                               isSearchForm: true,
                               placeholder: "Cari resep kamu disini",
                               controller: _searchController,
-                              isObscured: false
-                          ),
+                              isObscured: false),
                         ),
                       ),
                     )

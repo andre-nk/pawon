@@ -9,9 +9,6 @@ class UserService{
       userReference.doc(user.uid).set({
         'name': user.name,
         'email': user.email,
-        'history': user.history,
-        'plans': user.plans,
-        'recipes': user.recipes,
         'profileURL': user.profileURL != "" ? user.profileURL : ""
       });
     } catch (e) {
@@ -28,9 +25,6 @@ class UserService{
         name: snapshot["name"],
         email: snapshot["email"],
         profileURL: snapshot["profileURL"],
-        recipes: snapshot["recipes"].cast<String>(),
-        plans: snapshot["plans"].cast<String>(),
-        history: snapshot["history"].cast<String>()
       );
     } catch (e) {
       throw e;
@@ -50,13 +44,9 @@ class UserService{
       DocumentSnapshot snapshot = await userReference.doc(id).get();
       return UserModel(
         uid: id,
-        password: "",
         name: snapshot["name"],
         email: snapshot["email"],
         profileURL: snapshot["profileURL"],
-        recipes: snapshot["recipes"].cast<String>(),
-        plans: snapshot["plans"].cast<String>(),
-        history: snapshot["history"].cast<String>()
       );
     } catch (e) {
       throw e;
@@ -78,13 +68,9 @@ class UserService{
       DocumentSnapshot snapshot = await userReference.doc(id).get();
       return UserModel(
         uid: id,
-        password: "",
         name: snapshot["name"],
         email: snapshot["email"],
         profileURL: snapshot["profileURL"],
-        recipes: snapshot["recipes"].cast<String>(),
-        plans: snapshot["plans"].cast<String>(),
-        history: snapshot["history"].cast<String>()
       );
     } catch (e) {
       throw e;

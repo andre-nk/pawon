@@ -24,8 +24,9 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     TextEditingController(),
     TextEditingController()
   ];
+  XFile? pickedFile;
 
-  PreferredSize customAppBar({XFile? cover}) {
+  PreferredSize customAppBar(){
     return PreferredSize(
       child: CustomAppBar(
         title: "RESEP",
@@ -34,7 +35,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
         rightButtonCTA: true,
         rightButtonMethod: () {
           context.read<RecipeCubit>().createRecipe(
-            cover: cover,
+            cover: pickedFile,
             title: titleCtrl.text,
             ingredients: ingredientCtrls.map((ingredient){
               return {
@@ -60,7 +61,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     );
   }
 
-  Widget photoBox({required Orientation axis, XFile? cover}) {
+  Widget photoBox({required Orientation axis}) {
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
@@ -114,8 +115,8 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
           child: Container(
             width: double.infinity,
             color: ColorModel.kWhite,
-            child: cover != null 
-            ? Image.file(File(cover.path), fit: BoxFit.fitWidth)
+            child: pickedFile != null 
+            ? Image.file(File(pickedFile!.path), fit: BoxFit.fitWidth)
             : Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -307,103 +308,117 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 ),
               )
             );
+          } else if (state is RecipeCoverPicked){
+            setState(() {
+              pickedFile = state.pickedCover;
+            });
+          } else if (state is RecipeCreated){
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              customSnackBar(
+                content: "Resep berhasil dibuat!",
+                icon: Icon(
+                  Ionicons.checkmark_circle_outline,
+                  color: ColorModel.kGreen,
+                ),
+              )
+            );
           }
         },
         builder: (context, state) {
-          return OrientationBuilder(builder: (context, axis) {
-            return Stack(
-              children: [
-                ListView(
-                  padding: EdgeInsets.symmetric(horizontal: Spacers.m16, vertical: Spacers.s8).copyWith(
-                    bottom: Spacers.l32,
-                    top: 112,
-                  ),
-                  children: [
-                    state is RecipeCoverPicked
-                    ? photoBox(
+          if(state is RecipeLoading){
+            return CustomLoaderPage();
+          } else {
+            return OrientationBuilder(builder: (context, axis) {
+              return Stack(
+                children: [
+                  ListView(
+                    padding: EdgeInsets.symmetric(horizontal: Spacers.m16, vertical: Spacers.s8).copyWith(
+                      bottom: Spacers.l32,
+                      top: 112,
+                    ),
+                    children: [
+                      photoBox(axis: axis),
+                      SizedBox(height: Spacers.m24),
+                      CustomSimplifiedForm(
+                        title: "Judul resep",
+                        hintText: "Ayam Cabai Garam",
+                        controller: titleCtrl,
                         axis: axis,
-                        cover: state.pickedCover
+                      ),
+                      divider(),
+                      CustomSimplifiedForm(
+                        title: "Deskripsi resep (ops.)",
+                        hintText: "Ayam cabe garam adalah menu masakan yang sederhana namun kaya rasa. Pedas istimewa, gurih garamnya mengundang selera. Selalu mudah mengundang antrian untuk menikmatinya",
+                        controller: descriptionCtrl,
+                        axis: axis,
+                        isMultiline: true,
+                      ),
+                      divider(),
+                      ingredientSection(),
+                      addButton(
+                        Icon(
+                          Ionicons.add_circle_outline,
+                          color: ColorModel.majorText
+                        ),
+                        "Tambahkan alat / bahan",
+                        axis,
+                        (){
+                          setState(() {
+                            ingredientCtrls.add({"title": TextEditingController(), "amount": TextEditingController()});
+                          });
+                        }
+                      ),
+                      SizedBox(height: Spacers.m16),
+                      divider(),
+                      instructionSection(),
+                      addButton(
+                        Icon(
+                          Ionicons.add_circle_outline,
+                          color: ColorModel.majorText
+                        ),
+                        "Tambahkan langkah",
+                        axis,
+                        (){
+                          setState(() {
+                            stepCtrls.add(TextEditingController());
+                          });
+                        }
+                      ),
+                      SizedBox(height: Spacers.m16),
+                      Container(
+                        height: 1,
+                        width: double.infinity,
+                        color: ColorModel.kBorder,
+                      ),
+                      FormTile(
+                        title: "Penyajian/Servings",
+                        hintText: "1 porsi",
+                        isDouble: false,
+                        controller: servingsCtrl
+                      ),
+                      FormTile(
+                        title: "Waktu persiapan (ops.)",
+                        hintText: "5 menit",
+                        isDouble: false,
+                        controller: prepTimeCtrl
+                      ),
+                      FormTile(
+                        title: "Waktu masak",
+                        hintText: "15 menit",
+                        isDouble: false,
+                        controller: cookTimeCtrl
                       )
-                    : photoBox(axis: axis),
-                    SizedBox(height: Spacers.m24),
-                    CustomSimplifiedForm(
-                      title: "Judul resep",
-                      hintText: "Ayam Cabai Garam",
-                      controller: titleCtrl,
-                      axis: axis,
-                    ),
-                    divider(),
-                    CustomSimplifiedForm(
-                      title: "Deskripsi resep (ops.)",
-                      hintText: "Ayam cabe garam adalah menu masakan yang sederhana namun kaya rasa. Pedas istimewa, gurih garamnya mengundang selera. Selalu mudah mengundang antrian untuk menikmatinya",
-                      controller: descriptionCtrl,
-                      axis: axis,
-                      isMultiline: true,
-                    ),
-                    divider(),
-                    ingredientSection(),
-                    addButton(
-                      Icon(
-                        Ionicons.add_circle_outline,
-                        color: ColorModel.majorText
-                      ),
-                      "Tambahkan alat / bahan",
-                      axis,
-                      (){
-                        setState(() {
-                          ingredientCtrls.add({"title": TextEditingController(), "amount": TextEditingController()});
-                        });
-                      }
-                    ),
-                    SizedBox(height: Spacers.m16),
-                    divider(),
-                    instructionSection(),
-                    addButton(
-                      Icon(
-                        Ionicons.add_circle_outline,
-                        color: ColorModel.majorText
-                      ),
-                      "Tambahkan langkah",
-                      axis,
-                      (){
-                        setState(() {
-                          stepCtrls.add(TextEditingController());
-                        });
-                      }
-                    ),
-                    SizedBox(height: Spacers.m16),
-                    Container(
-                      height: 1,
-                      width: double.infinity,
-                      color: ColorModel.kBorder,
-                    ),
-                    FormTile(
-                      title: "Penyajian/Servings",
-                      hintText: "1 porsi",
-                      isDouble: false,
-                      controller: servingsCtrl
-                    ),
-                    FormTile(
-                      title: "Waktu persiapan (ops.)",
-                      hintText: "5 menit",
-                      isDouble: false,
-                      controller: prepTimeCtrl
-                    ),
-                    FormTile(
-                      title: "Waktu masak",
-                      hintText: "15 menit",
-                      isDouble: false,
-                      controller: cookTimeCtrl
-                    )
-                  ]
-                ),
-                Container(
-                  height: 100,
-                  child: customAppBar()
-                ),
-              ],
-            );
-          });
+                    ]
+                  ),
+                  Container(
+                    height: 100,
+                    child: customAppBar()
+                  ),
+                ],
+              );
+            });
+          }
         },
       )
     );

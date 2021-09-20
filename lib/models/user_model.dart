@@ -7,9 +7,6 @@ class UserModel extends Equatable{
   final String email;
   final String password;
   final String profileURL;
-  final List<String> plans;
-  final List<String> history;
-  final List<String> recipes;
 
   UserModel({
     required this.uid, 
@@ -17,13 +14,10 @@ class UserModel extends Equatable{
     required this.email,
     this.password = "",
     this.profileURL = "",
-    this.plans = const [],
-    this.history = const [],
-    this.recipes = const []
   });
 
   @override
-  List<Object?> get props => [uid, password, name, email, profileURL, plans, history, recipes];
+  List<Object?> get props => [uid, password, name, email, profileURL];
 
   factory UserModel.fromJson(Map<String, dynamic> json){
     return UserModel(
@@ -32,9 +26,6 @@ class UserModel extends Equatable{
       email: json["email"] as String,
       profileURL: json["profileURL"] as String,
       password: json["password"] as String,
-      history: json["history"] as List<String>,
-      recipes: json["recipes"] as List<String>,
-      plans: json["plans"] as List<String>
     );
   } 
 
@@ -45,9 +36,6 @@ class UserModel extends Equatable{
       "email": instance.email,
       "profileURL": instance.profileURL,
       "password": instance.password,
-      "history": instance.history,
-      "recipes": instance.recipes,
-      "plans": instance.plans,
     };
   }
 }

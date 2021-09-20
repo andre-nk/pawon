@@ -16,9 +16,6 @@ class AuthService{
         email: email,
         name: name,
         password: password,
-        history: [],
-        plans: [],
-        recipes: []
       );
       _auth.currentUser!.updateDisplayName(name);
       await UserService().createUser(user);
@@ -39,10 +36,6 @@ class AuthService{
         email: email,
         name: userCredential.user!.displayName ?? "",
         profileURL: userCredential.user!.photoURL ?? "",
-        password: password,
-        history: [],
-        plans: [],
-        recipes: []
       );
       return user;
     } catch (e) {
@@ -64,10 +57,6 @@ class AuthService{
         email: userCredential.user!.email ?? "",
         name: userCredential.user!.displayName ?? "",
         profileURL: userCredential.user!.photoURL ?? "",
-        password: "",
-        history: [],
-        plans: [],
-        recipes: []
       );
       
       await UserService().createUser(user);

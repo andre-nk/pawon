@@ -29,8 +29,25 @@ class RecipeService{
         "instructionSteps": instructionSteps,
         "servings": servings ?? "",
         "prepsTime": prepsTime ?? "",
-        "cookTime": cookTime ?? ""
+        "cookTime": cookTime ?? "",
+        "cookedTime": 0
       });
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Stream<List<RecipeModel>> fetchRecipes(){
+    try {
+      final snapshot = recipesReference.snapshots().map((recipeList){
+        return recipeList.docs.map((recipe){
+          return RecipeModel.fromJson(
+            recipe.id,
+            recipe.data() as Map<String, dynamic>);
+          }
+        ).toList(); 
+      });
+      return snapshot;
     } catch (e) {
       throw e;
     }

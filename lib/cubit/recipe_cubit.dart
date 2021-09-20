@@ -49,6 +49,7 @@ class RecipeCubit extends Cubit<RecipeState> {
       } else if (instructionSteps == []){
         emit(RecipeFailed("Please create at least one instruction step"));
       } else {
+        print("X");
         if(cover != null){
           print("A");
           await storage.ref(reference).putFile(File(cover.path));
@@ -87,4 +88,15 @@ class RecipeCubit extends Cubit<RecipeState> {
       emit(RecipeFailed(e.toString()));
     }
   }
+
+  void fetchRecipes() async {
+    try {
+      emit(RecipeLoading());
+      Stream<List<RecipeModel>> recipes = RecipeService().fetchRecipes();
+      emit(RecipeLoaded(recipes));
+    } catch (e) {
+      emit(RecipeFailed(e.toString()));
+    }
+  }
 }
+

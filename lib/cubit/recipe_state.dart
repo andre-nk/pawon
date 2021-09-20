@@ -22,7 +22,7 @@ class RecipeCoverPicked extends RecipeState {
 }
 
 class RecipeLoaded extends RecipeState {
-  final List<RecipeModel> recipes;
+  final Stream<List<RecipeModel>> recipes;
   RecipeLoaded(this.recipes);
 
   @override

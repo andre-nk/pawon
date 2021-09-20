@@ -53,6 +53,8 @@ class MyApp extends StatelessWidget {
             print(state);
             if(state is AuthSuccess){
               return WrapperPage();
+            } else if (state is NotAuthenticated){
+              return OnboardingPage();
             } else {
               return OnboardingPage();
             }

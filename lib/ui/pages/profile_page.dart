@@ -73,14 +73,14 @@ class ProfilePage extends StatelessWidget {
         child: Container(
           height: 65,
           width: 65,
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: ColorModel.disabledRed,
             borderRadius: Spacers.borderRadius,
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(profileURL),
-            )
           ),
+          child: CachedNetworkImage(
+            imageUrl: profileURL
+          )
         ),
       ),
     );
