@@ -32,7 +32,7 @@ class FormTile extends StatelessWidget {
             trailing: Container(
               width: 150,
               child: TextFormField(
-                controller: this.secondaryController != null ? this.secondaryController : null,
+                controller: this.controller,
                 keyboardType: TextInputType.multiline,
                 maxLines: 1,
                 textAlign: TextAlign.end,
@@ -78,15 +78,15 @@ class FormTile extends StatelessWidget {
           trailing: Container(
             width: 150,
             child: TextFormField(
-              controller: this.controller,
+              controller: this.secondaryController,
               keyboardType: TextInputType.multiline,
               maxLines: 1,
               textAlign: TextAlign.end,
-              style: Font.textLMedium,
+              style: Font.textLRegular,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: this.hintText,
-                hintStyle: Font.textLMedium.copyWith(
+                hintStyle: Font.textLRegular.copyWith(
                   color: ColorModel.kText
                 )
               ),

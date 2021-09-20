@@ -8,7 +8,8 @@ class RecipeService{
     .collection('recipes');
 
   Future<void> createRecipe({
-    XFile? cover,
+    required String id,
+    String? coverURL,
     required String title,
     String? description,
     required List<Map<String, String>> ingredients,
@@ -19,8 +20,8 @@ class RecipeService{
     String? cookTime
   }) async {
     try {
-      recipesReference.doc().set({
-        "coverURL": cover,
+      recipesReference.doc(id).set({
+        "coverURL": coverURL,
         "title": title,
         "description": description ?? "",
         "ingredients": ingredients,
