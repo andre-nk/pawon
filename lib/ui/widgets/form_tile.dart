@@ -6,9 +6,10 @@ class FormTile extends StatelessWidget {
   final String hintText;
   final String? secondaryHintText;
   final bool isDouble;
+  final bool? readOnly;
   final TextEditingController controller;
   final TextEditingController? secondaryController;
-  const FormTile({ Key? key, required this.title, required this.isDouble, required this.hintText, required this.controller, this.secondaryController, this.secondaryHintText }) : super(key: key);
+  const FormTile({ Key? key, required this.title, required this.isDouble, required this.hintText, required this.controller, this.secondaryController, this.secondaryHintText, this.readOnly}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class FormTile extends StatelessWidget {
             trailing: Container(
               width: 150,
               child: TextFormField(
+                readOnly: this.readOnly ?? false,
                 controller: this.controller,
                 keyboardType: TextInputType.multiline,
                 maxLines: 1,
@@ -62,6 +64,7 @@ class FormTile extends StatelessWidget {
             horizontal: 0
           ),
           title: TextFormField(
+            readOnly: this.readOnly ?? false,
             controller: this.controller,
             keyboardType: TextInputType.multiline,
             maxLines: 1,
@@ -78,6 +81,7 @@ class FormTile extends StatelessWidget {
           trailing: Container(
             width: 150,
             child: TextFormField(
+              readOnly: this.readOnly ?? false,
               controller: this.secondaryController,
               keyboardType: TextInputType.multiline,
               maxLines: 1,

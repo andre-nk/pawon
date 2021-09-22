@@ -168,12 +168,19 @@ class _HomePageState extends State<HomePage> with AnimationMixin {
                       if(snapshot.hasData){
                         return Column(
                           children: List.generate(snapshot.data!.length, (index) {
-                              return PhotoListTile(
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  PageTransition(child: RecipePage(recipe: snapshot.data![index]), type: PageTransitionType.rightToLeftWithFade)
+                                );
+                              },
+                              child: PhotoListTile(
                                 photoURL: snapshot.data![index].coverURL ?? "",
                                 title: snapshot.data![index].title,
                                 subtitle: "${snapshot.data![index].cookTime}; ${snapshot.data![index].cookedTime}x dimasak",
-                              );
-                            }
+                              ),
+                            );}
                           )
                         );
                       } else {

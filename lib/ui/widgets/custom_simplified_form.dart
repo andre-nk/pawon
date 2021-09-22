@@ -6,8 +6,9 @@ class CustomSimplifiedForm extends StatelessWidget {
   final String hintText;
   final Orientation axis;
   final bool? isMultiline;
+  final bool? readOnly;
   final TextEditingController controller;
-  const CustomSimplifiedForm({ Key? key, required this.title, required this.hintText, required this.controller, required this.axis, this.isMultiline}) : super(key: key);
+  const CustomSimplifiedForm({ Key? key, required this.title, required this.hintText, required this.controller, required this.axis, this.isMultiline, this.readOnly}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,7 @@ class CustomSimplifiedForm extends StatelessWidget {
         children: [
           Text(this.title, style: Font.incLRegular),
           TextFormField(
+            readOnly: this.readOnly ?? false,
             controller: this.controller,
             style: Font.textLMedium,
             maxLines: this.isMultiline != null && this.isMultiline == true ? null : 1,
@@ -39,6 +41,7 @@ class CustomSimplifiedForm extends StatelessWidget {
           Expanded(
             flex: 16,
             child: TextFormField(
+              readOnly: this.readOnly ?? false,
               controller: this.controller,
               style: Font.textLMedium,
               maxLines: this.isMultiline != null && this.isMultiline == true ? null : 1,

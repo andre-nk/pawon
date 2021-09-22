@@ -1,13 +1,15 @@
 part of "pages.dart";
 
-class CreateRecipePage extends StatefulWidget {
-  const CreateRecipePage({Key? key}) : super(key: key);
+class RecipePage extends StatefulWidget {
+
+  final RecipeModel? recipe;
+  const RecipePage({Key? key, this.recipe}) : super(key: key);
 
   @override
-  _CreateRecipePageState createState() => _CreateRecipePageState();
+  _RecipePageState createState() => _RecipePageState();
 }
 
-class _CreateRecipePageState extends State<CreateRecipePage> {
+class _RecipePageState extends State<RecipePage> {
   TextEditingController titleCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
   TextEditingController instructionCtrl = TextEditingController();
@@ -24,34 +26,87 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     TextEditingController(),
     TextEditingController()
   ];
+  bool isEditing = false;
   XFile? pickedFile;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.recipe != null){
+      isEditing = false;
+      titleCtrl.text = widget.recipe!.title;
+      descriptionCtrl.text = widget.recipe!.description ?? "";
+      instructionCtrl.text = widget.recipe!.instructionDescription ?? "";
+      servingsCtrl.text = widget.recipe!.servings ?? "";
+      prepTimeCtrl.text = widget.recipe!.prepsTime ?? "";
+      cookTimeCtrl.text = widget.recipe!.cookTime ?? "";
+      ingredientCtrls = widget.recipe!.ingredients.map((ingredient){
+        return {
+          "title": TextEditingController(text: ingredient["title"]),
+          "amount": TextEditingController(text: ingredient["amount"])
+        };
+      }).cast<Map<String, TextEditingController>>().toList();
+      stepCtrls = widget.recipe!.instructionSteps.map((step){
+        return TextEditingController(text: step);
+      }).cast<TextEditingController>().toList();
+    } else {
+      isEditing = true;
+    }
+  }
 
   PreferredSize customAppBar(){
     return PreferredSize(
       child: CustomAppBar(
         title: "RESEP",
         leftButton: "Batal",
-        rightButton: "Simpan",
-        rightButtonCTA: true,
+        rightButton: isEditing ? "Simpan" : "Edit",
+        rightButtonCTA: isEditing,
         rightButtonMethod: () {
-          context.read<RecipeCubit>().createRecipe(
-            cover: pickedFile,
-            title: titleCtrl.text,
-            ingredients: ingredientCtrls.map((ingredient){
-              return {
-                "title": ingredient["title"]!.text,
-                "amount": ingredient["amount"]!.text
-              };
-            }).toList(),
-            instructionSteps: stepCtrls.map((step){
-              return step.text;
-            }).toList(),
-            description: descriptionCtrl.text,
-            instructionDescription: instructionCtrl.text,
-            servings: servingsCtrl.text,
-            prepsTime: prepTimeCtrl.text,
-            cookTime: cookTimeCtrl.text
-          );
+          if(isEditing && widget.recipe == null){
+            context.read<RecipeCubit>().createRecipe(
+              cover: pickedFile,
+              title: titleCtrl.text,
+              ingredients: ingredientCtrls.map((ingredient){
+                return {
+                  "title": ingredient["title"]!.text,
+                  "amount": ingredient["amount"]!.text
+                };
+              }).toList(),
+              instructionSteps: stepCtrls.map((step){
+                return step.text;
+              }).toList(),
+              description: descriptionCtrl.text,
+              instructionDescription: instructionCtrl.text,
+              servings: servingsCtrl.text,
+              prepsTime: prepTimeCtrl.text,
+              cookTime: cookTimeCtrl.text
+            );
+          } else if(isEditing && widget.recipe != null){
+            context.read<RecipeCubit>().updateRecipe(
+              id: widget.recipe!.id,
+              cover: pickedFile,
+              coverURL: widget.recipe!.coverURL,
+              title: titleCtrl.text,
+              ingredients: ingredientCtrls.map((ingredient){
+                return {
+                  "title": ingredient["title"]!.text,
+                  "amount": ingredient["amount"]!.text
+                };
+              }).toList(),
+              instructionSteps: stepCtrls.map((step){
+                return step.text;
+              }).toList(),
+              description: descriptionCtrl.text,
+              instructionDescription: instructionCtrl.text,
+              servings: servingsCtrl.text,
+              prepsTime: prepTimeCtrl.text,
+              cookTime: cookTimeCtrl.text
+            );
+          } else {
+            setState(() {
+              isEditing = true;
+            });
+          }
         },
         leftButtonMethod: () {
           Navigator.pop(context);
@@ -64,7 +119,8 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   Widget photoBox({required Orientation axis}) {
     return GestureDetector(
       onTap: () {
-        showModalBottomSheet(
+        if(isEditing){
+          showModalBottomSheet(
             context: context,
             builder: (context) {
               return Container(
@@ -104,6 +160,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                     ]).toList(),
                   ));
             });
+        }
       },
       child: DottedBorder(
         color: ColorModel.kText,
@@ -113,20 +170,39 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
         child: AspectRatio(
           aspectRatio: axis == Orientation.landscape ? 16 / 3 : 16 / 9,
           child: Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              color: ColorModel.kWhite,
+            ),
             width: double.infinity,
-            color: ColorModel.kWhite,
-            child: pickedFile != null 
-            ? Image.file(File(pickedFile!.path), fit: BoxFit.fitWidth)
-            : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Ionicons.camera_outline, color: ColorModel.majorText),
-                  SizedBox(height: Spacers.s8),
-                  Text("Tambahkan foto masakan", style: Font.textSRegular)
-                ]
-              ),
-            )
+            child: isEditing
+            ? widget.recipe!.coverURL != null || widget.recipe!.coverURL != ""
+              ? Image.network(widget.recipe!.coverURL ?? "", fit: BoxFit.fitWidth)
+              : pickedFile != null 
+              ? Image.file(File(pickedFile!.path), fit: BoxFit.fitWidth)
+              : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Ionicons.camera_outline, color: ColorModel.majorText),
+                    SizedBox(height: Spacers.s8),
+                    Text("Tambahkan foto masakan", style: Font.textSRegular)
+                  ]
+                ),
+              ) 
+            : widget.recipe!.coverURL != null || widget.recipe!.coverURL != ""
+              ? Image.network(widget.recipe!.coverURL ?? "", fit: BoxFit.fitWidth)
+              : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Ionicons.camera_outline, color: ColorModel.majorText),
+                    SizedBox(height: Spacers.s8),
+                    Text("Tambahkan foto masakan", style: Font.textSRegular)
+                  ]
+                ),
+              ) 
           ),
         ),
       ),
@@ -152,7 +228,11 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
       ),
       alignment: Alignment.center,
       child: TextButton(
-        onPressed: onTap,
+        onPressed: (){
+          if(isEditing){
+            onTap();
+          }
+        },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
             horizontal: 0,
@@ -186,13 +266,16 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
       children: [
         Text("Instruksi resep (opsional)", style: Font.incLRegular),
         TextFormField(
+          readOnly: !isEditing,
           controller: instructionCtrl,
           style: Font.textLRegular.copyWith(height: 1.75),
-          minLines: 3,
+          minLines: widget.recipe!.instructionDescription == "" && isEditing == false ? 1 : 3,
           maxLines: 5,
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: "Ayam cabe garam adalah menu masakan yang sederhana namun kaya rasa. Pedas istimewa, gurih garamnya mengundang selera. Selalu mudah mengundang antrian untuk menikmatinya.",
+            hintText: isEditing
+            ? "Ayam cabe garam adalah menu masakan yang sederhana namun kaya rasa. Pedas istimewa, gurih garamnya mengundang selera. Selalu mudah mengundang antrian untuk menikmatinya."
+            : "Tidak ada deskripsi",
             hintStyle: Font.textLMedium.copyWith(color: ColorModel.kText)
           ),
         ),
@@ -200,14 +283,54 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
           padding: EdgeInsets.symmetric(vertical: Spacers.s12),
           child: Column(
             children: List.generate(stepCtrls.length, (index) {
-            return Dismissible(
-              key: UniqueKey(),
-              onDismissed: (axis){
-                setState(() {
-                  stepCtrls.removeAt(index);
-                });
-              },
-              child: Column(
+            return isEditing
+            ? Dismissible(
+                key: UniqueKey(),
+                onDismissed: (axis){
+                  setState(() {
+                    stepCtrls.removeAt(index);
+                  });
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: ColorModel.kBorder,
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.symmetric(vertical: Spacers.s4, horizontal: 0),
+                      minLeadingWidth: 28,
+                      leading: Container(
+                        height: 24,
+                        width: 24,
+                        decoration: BoxDecoration(
+                          color: ColorModel.kBorder,
+                          borderRadius: Spacers.borderRadius,
+                        ),
+                        child: Center(
+                          child: Text(
+                            "${index + 1}",
+                            style: Font.textMRegular)
+                          )
+                        ),
+                      title: TextFormField(
+                        readOnly: !isEditing,
+                        controller: stepCtrls[index],
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        style: Font.textLMedium,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Ayam Cabai Garam",
+                          hintStyle: Font.textLMedium.copyWith(color: ColorModel.kText)
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            : Column(
                 children: [
                   Container(
                     height: 1,
@@ -231,6 +354,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                         )
                       ),
                     title: TextFormField(
+                      readOnly: !isEditing,
                       controller: stepCtrls[index],
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
@@ -243,8 +367,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                     ),
                   )
                 ],
-              ),
-            );
+              );
           })),
         ),
       ]
@@ -260,14 +383,34 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
           padding: EdgeInsets.symmetric(vertical: Spacers.s12),
           child: Column(
             children: List.generate(ingredientCtrls.length, (index) {
-              return Dismissible(
-                key: UniqueKey(),
-                onDismissed: (axis){
-                  setState(() {
-                    ingredientCtrls.removeAt(index);
-                  });
-                },
-                child: Column(
+              return isEditing
+              ? Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (axis){
+                    setState(() {
+                      ingredientCtrls.removeAt(index);
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 1,
+                        width: double.infinity,
+                        color: ColorModel.kBorder,
+                      ),
+                      FormTile(
+                        readOnly: !isEditing,
+                        title: "Penyajian/Servings",
+                        hintText: "1 porsi",
+                        secondaryHintText: "Telur Ayam",
+                        isDouble: true,
+                        controller: ingredientCtrls[index]["title"]!,
+                        secondaryController: ingredientCtrls[index]["amount"]!,
+                      ),
+                    ],
+                  ),
+                )
+              : Column(
                   children: [
                     Container(
                       height: 1,
@@ -275,6 +418,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                       color: ColorModel.kBorder,
                     ),
                     FormTile(
+                      readOnly: !isEditing,
                       title: "Penyajian/Servings",
                       hintText: "1 porsi",
                       secondaryHintText: "Telur Ayam",
@@ -283,8 +427,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                       secondaryController: ingredientCtrls[index]["amount"]!,
                     ),
                   ],
-                ),
-              );
+                );
             })
           ),
         ),
@@ -294,6 +437,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(isEditing);
     return Scaffold(
       backgroundColor: ColorModel.kWhite,
       body: BlocConsumer<RecipeCubit, RecipeState>(
@@ -313,10 +457,16 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
               pickedFile = state.pickedCover;
             });
           } else if (state is RecipeCreated){
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+              context,
+              PageTransition(child: HomePage(), type: PageTransitionType.rightToLeftWithFade),
+              (route) => false
+            );
             ScaffoldMessenger.of(context).showSnackBar(
               customSnackBar(
-                content: "Resep berhasil dibuat!",
+                content: widget.recipe == null
+                ? "Resep berhasil dibuat!"
+                : "Resep berhasil diedit!",
                 icon: Icon(
                   Ionicons.checkmark_circle_outline,
                   color: ColorModel.kGreen,
@@ -345,6 +495,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                         hintText: "Ayam Cabai Garam",
                         controller: titleCtrl,
                         axis: axis,
+                        readOnly: !isEditing
                       ),
                       divider(),
                       CustomSimplifiedForm(
@@ -353,39 +504,56 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                         controller: descriptionCtrl,
                         axis: axis,
                         isMultiline: true,
+                        readOnly: !isEditing
                       ),
                       divider(),
                       ingredientSection(),
-                      addButton(
-                        Icon(
-                          Ionicons.add_circle_outline,
-                          color: ColorModel.majorText
-                        ),
-                        "Tambahkan alat / bahan",
-                        axis,
-                        (){
-                          setState(() {
-                            ingredientCtrls.add({"title": TextEditingController(), "amount": TextEditingController()});
-                          });
-                        }
-                      ),
-                      SizedBox(height: Spacers.m16),
+                      isEditing
+                      ? Column(
+                          children: [
+                            addButton(
+                              Icon(
+                                Ionicons.add_circle_outline,
+                                color: ColorModel.majorText
+                              ),
+                              "Tambahkan alat / bahan",
+                              axis,
+                              (){
+                                if(isEditing){
+                                  setState(() {
+                                    ingredientCtrls.add({"title": TextEditingController(), "amount": TextEditingController()});
+                                  });
+                                }
+                              }
+                            ),
+                            SizedBox(height: Spacers.m16),
+                          ],
+                        )
+                      : SizedBox(),
                       divider(),
                       instructionSection(),
-                      addButton(
-                        Icon(
-                          Ionicons.add_circle_outline,
-                          color: ColorModel.majorText
-                        ),
-                        "Tambahkan langkah",
-                        axis,
-                        (){
-                          setState(() {
-                            stepCtrls.add(TextEditingController());
-                          });
-                        }
-                      ),
-                      SizedBox(height: Spacers.m16),
+                      isEditing
+                      ? Column(
+                          children: [
+                            addButton(
+                              Icon(
+                                Ionicons.add_circle_outline,
+                                color: ColorModel.majorText
+                              ),
+                              "Tambahkan langkah",
+                              axis,
+                              (){
+                                if(isEditing){
+                                  setState(() {
+                                    stepCtrls.add(TextEditingController());
+                                  });
+                                }
+                              }
+                            ),
+                            SizedBox(height: Spacers.m16),
+                          ],
+                        )
+                      : SizedBox(),
                       Container(
                         height: 1,
                         width: double.infinity,

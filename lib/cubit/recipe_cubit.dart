@@ -89,6 +89,73 @@ class RecipeCubit extends Cubit<RecipeState> {
     }
   }
 
+  Future<void> updateRecipe({
+    required String id,
+    XFile? cover,
+    String? coverURL,
+    required String title,
+    String? description,
+    required List<Map<String, String>> ingredients,
+    String? instructionDescription,
+    required List<String> instructionSteps,
+    String? servings,
+    String? prepsTime,
+    String? cookTime
+  }) async {
+
+
+    FirebaseStorage storage = FirebaseStorage.instance;
+    String reference = '${FirebaseAuth.instance.currentUser!.uid}/$id';
+
+    try {
+      emit(RecipeLoading());
+      if(title == ""){
+        emit(RecipeFailed("Please type this recipe's title"));
+      } else if (ingredients == []){
+        emit(RecipeFailed("Please create at least one ingredient"));
+      } else if (instructionSteps == []){
+        emit(RecipeFailed("Please create at least one instruction step"));
+      } else {
+        print("X");
+        if(cover != null){
+          print("A");
+          await storage.ref(reference).putFile(File(cover.path));
+          String coverURL = await storage.ref(reference).getDownloadURL();
+          await RecipeService().updateRecipe(
+            id: id,
+            coverURL: coverURL,
+            title: title,
+            description: description,
+            ingredients: ingredients,
+            instructionDescription: instructionDescription,
+            instructionSteps: instructionSteps,
+            servings: servings,
+            prepsTime: prepsTime,
+            cookTime: cookTime
+          );
+          emit(RecipeCreated());
+        } else {
+          print("B");
+          await RecipeService().updateRecipe(
+            id: id,
+            coverURL: coverURL,
+            title: title,
+            description: description,
+            ingredients: ingredients,
+            instructionDescription: instructionDescription,
+            instructionSteps: instructionSteps,
+            servings: servings,
+            prepsTime: prepsTime,
+            cookTime: cookTime
+          );
+          emit(RecipeCreated());
+        }
+      }
+    } catch (e) {
+      emit(RecipeFailed(e.toString()));
+    }
+  }
+
   void fetchRecipes() async {
     try {
       emit(RecipeLoading());
