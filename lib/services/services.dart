@@ -11,3 +11,4 @@ part 'auth_service.dart';
 part 'image_service.dart';
 part 'recipe_service.dart';
 part 'user_service.dart';
+part 'plan_service.dart';

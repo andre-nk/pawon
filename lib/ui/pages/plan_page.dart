@@ -12,8 +12,13 @@ class _PlanPageState extends State<PlanPage> {
   final scaffoldState = GlobalKey<ScaffoldState>();
   final TextEditingController _searchController = TextEditingController();
 
+  DateTime planCreatorDate = DateTime.now();
+  List<RecipeModel> pickedRecipes = [];
+
   @override
   Widget build(BuildContext context) {
+
+    print(pickedRecipes);
 
     Widget recipePicker(){
       return Wrap(
@@ -26,89 +31,110 @@ class _PlanPageState extends State<PlanPage> {
               bottom: 0
             ),
             height: MediaQuery.of(context).size.height * 0.8,
-            child: Stack(
-              children: [
-                Container(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: BlocConsumer<RecipeCubit, RecipeState>(
+              builder: (context, state){
+                return Stack(
+                  children: [
+                    Container(
+                      child: Column(
                         children: [
-                          Expanded(
-                            flex: 8,
-                            child: CustomForms(
-                              isSearchForm: false,
-                              placeholder: "Cari resep kamu disini",
-                              controller: _searchController,
-                              isObscured: false
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 8,
+                                child: CustomForms(
+                                  isSearchForm: false,
+                                  placeholder: "Cari resep kamu disini",
+                                  controller: _searchController,
+                                  isObscured: false
+                                ),
+                              ),
+                              SizedBox(width: Spacers.m16),
+                              IconButton(
+                                onPressed: (){
+                                  Navigator.of(context).pop();
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context){
+                                      return CreateRecipeBottomsheet();
+                                    }
+                                  );
+                                },
+                                icon: Icon(
+                                  Ionicons.add_circle_outline,
+                                  size: 28,
+                                  color: ColorModel.majorText
+                                )
+                              )
+                            ],
                           ),
-                          SizedBox(width: Spacers.m16),
-                          IconButton(
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context){
-                                  return CreateRecipeBottomsheet();
-                                }
-                              );
-                            },
-                            icon: Icon(
-                              Ionicons.add_circle_outline,
-                              size: 28,
-                              color: ColorModel.majorText
-                            )
-                          )
+                          SizedBox(height: Spacers.m16),
+                          if(state is RecipeLoaded)
+                          StreamBuilder<List<RecipeModel>>(
+                            stream: state.recipes,
+                            builder: (context, snapshot) {
+                              if(snapshot.hasData){
+                                return Expanded(
+                                  flex: 8,
+                                  child: ListView.separated(
+                                    itemCount: snapshot.data!.length,
+                                    separatorBuilder: (context, index){
+                                      return Container(
+                                        height: 1,
+                                        width: double.infinity,
+                                        color: ColorModel.kBorder,
+                                      ); 
+                                    },
+                                    itemBuilder: (context, index){
+                                      return CheckBoxListTile(
+                                        imageURL: snapshot.data![index].coverURL,
+                                        recipeModel: snapshot.data![index],
+                                        title: snapshot.data![index].title,
+                                        subtitle: "${snapshot.data![index].cookTime}; ${snapshot.data![index].cookedTime}x dimasak",
+                                      );
+                                    },
+                                  )
+                                );
+                              } else {
+                                return SizedBox();
+                              }
+                            }
+                          ) else 
+                          SizedBox()
                         ],
                       ),
-                      SizedBox(height: Spacers.m16),
-                      Expanded(
-                        flex: 8,
-                        child: ListView.separated(
-                          itemCount: 10,
-                          separatorBuilder: (context, index){
-                            return Container(
-                              height: 1,
-                              width: double.infinity,
-                              color: ColorModel.kBorder,
-                            ); 
-                          },
-                          itemBuilder: (context, index){
-                            return CheckBoxListTile(
-                              imageURL: "a",
-                              title: "Ayam Cabai Garam",
-                              subtitle: "40 menit; 10x dimasak"
-                            );
-                          },
-                        )
-                      )
-                    ],
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: 350,
-                    margin: EdgeInsets.only(bottom: Spacers.l32),
-                    child: PrimaryButton(
-                      content: "Tambahkan Rencana (10 resep) ",
-                      isGoogleButton: false,
-                      isMinified: false,
-                      isCTA: false,
-                      isHovering: true,
-                      onPressed: (){}
                     ),
-                  ),
-                )
-              ],
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: 350,
+                        margin: EdgeInsets.only(bottom: Spacers.l32),
+                        child: PrimaryButton(
+                          content: context.watch<RecipePickerCubit>().state.length == 0
+                          ? "Tambahkan Rencana"
+                          : "Tambahkan Rencana (${context.watch<RecipePickerCubit>().state.length} resep) ",
+                          isGoogleButton: false,
+                          isMinified: false,
+                          isCTA: false,
+                          isHovering: true,
+                          onPressed: (){}
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
+              listener: (context, state){
+
+              }
             )
           )
         ]
       );
     }
 
-    Widget calendarPicker(){
+    Widget calendarPicker(String source){
       return Container(
         color: ColorModel.kWhite,
         height: 500,
@@ -117,8 +143,19 @@ class _PlanPageState extends State<PlanPage> {
             CustomAppBar(
               title: "TANGGAL",
               leftButton: "Batal",
-              rightButton: "Pilih",
-              rightButtonMethod: (){},
+              rightButton: source == "Plan Creator" ? "Lanjut" : "Pilih",
+              rightButtonMethod: (){
+                if(source == "Plan Creator"){
+                  Navigator.pop(context);
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context){
+                      return recipePicker();
+                    }
+                  );
+                }
+              },
               leftButtonMethod: (){
                 Navigator.pop(context);
               }
@@ -133,7 +170,14 @@ class _PlanPageState extends State<PlanPage> {
                 child: CupertinoDatePicker(
                   mode: CupertinoDatePickerMode.date,
                   onDateTimeChanged: (date){
-                    print(date);
+                    if(source == "Plan Creator"){
+                      print(date);
+                      setState(() {
+                        planCreatorDate = date;
+                      });
+                    } else {
+                      print(date);
+                    }
                   }
                 ),
               ),
@@ -170,7 +214,7 @@ class _PlanPageState extends State<PlanPage> {
                   showModalBottomSheet(
                     context: context,
                     builder: (context){
-                      return calendarPicker();
+                      return calendarPicker("");
                     }
                   );
                 },
@@ -185,10 +229,9 @@ class _PlanPageState extends State<PlanPage> {
                 padding: EdgeInsets.zero,
                 onPressed: (){
                   showModalBottomSheet(
-                    isScrollControlled: true,
                     context: context,
-                    builder: (BuildContext bc) {
-                      return recipePicker();
+                    builder: (context){
+                      return calendarPicker("Plan Creator");
                     }
                   );
                 },

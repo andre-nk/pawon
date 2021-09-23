@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawon/models/models.dart';
 import 'package:pawon/services/services.dart';
@@ -11,7 +12,7 @@ import 'package:uuid/uuid.dart';
 
 part 'recipe_state.dart';
 
-class RecipeCubit extends Cubit<RecipeState> {
+class RecipeCubit extends Cubit<RecipeState>{
   RecipeCubit() : super(RecipeInitial());
 
   Future<XFile?> pickRecipeCover(ImageSource source) async {
@@ -34,8 +35,7 @@ class RecipeCubit extends Cubit<RecipeState> {
     String? servings,
     String? prepsTime,
     String? cookTime
-  }) async {
-    
+  }) async {  
     String id = Uuid().v1();
     FirebaseStorage storage = FirebaseStorage.instance;
     String reference = '${FirebaseAuth.instance.currentUser!.uid}/$id';
@@ -102,8 +102,6 @@ class RecipeCubit extends Cubit<RecipeState> {
     String? prepsTime,
     String? cookTime
   }) async {
-
-
     FirebaseStorage storage = FirebaseStorage.instance;
     String reference = '${FirebaseAuth.instance.currentUser!.uid}/$id';
 

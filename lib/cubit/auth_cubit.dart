@@ -155,7 +155,9 @@ class AuthCubit extends Cubit<AuthState> with HydratedMixin {
         "status": "Not Authenticated"
       };
     } else {
-      return null;
+      return {
+        "status": null
+      };
     }
   }
 }

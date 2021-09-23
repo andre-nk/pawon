@@ -177,9 +177,7 @@ class _RecipePageState extends State<RecipePage> {
             ),
             width: double.infinity,
             child: isEditing
-            ? widget.recipe!.coverURL != null || widget.recipe!.coverURL != ""
-              ? Image.network(widget.recipe!.coverURL ?? "", fit: BoxFit.fitWidth)
-              : pickedFile != null 
+            ? pickedFile != null 
               ? Image.file(File(pickedFile!.path), fit: BoxFit.fitWidth)
               : Center(
                 child: Column(
@@ -269,7 +267,7 @@ class _RecipePageState extends State<RecipePage> {
           readOnly: !isEditing,
           controller: instructionCtrl,
           style: Font.textLRegular.copyWith(height: 1.75),
-          minLines: widget.recipe!.instructionDescription == "" && isEditing == false ? 1 : 3,
+          minLines: isEditing == false && widget.recipe!.instructionDescription == "" ? 1 : 3,
           maxLines: 5,
           decoration: InputDecoration(
             border: InputBorder.none,

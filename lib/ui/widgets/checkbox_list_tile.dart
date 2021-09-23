@@ -6,15 +6,13 @@ class CheckBoxListTile extends StatefulWidget {
   final String subtitle;
   final String? imageURL;
   final bool? isTrailed;
-  const CheckBoxListTile({ Key? key, required this.title, required this.subtitle, this.imageURL, this.isTrailed }) : super(key: key);
+  final RecipeModel? recipeModel;
+  const CheckBoxListTile({ Key? key, this.recipeModel, required this.title, required this.subtitle, this.imageURL, this.isTrailed }) : super(key: key);
 
   @override
   State<CheckBoxListTile> createState() => _CheckBoxListTileState();
 }
-class _CheckBoxListTileState extends State<CheckBoxListTile> {
-
-  bool checkboxValue = false;
-  
+class _CheckBoxListTileState extends State<CheckBoxListTile> {  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,50 +27,79 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomCheckbox(
-                value: checkboxValue,
+                value: context.watch<RecipePickerCubit>().isSelected(widget.recipeModel!),
                 onChanged: (value){
-                  setState(() {
-                    checkboxValue = value;
-                  });
+                  context.read<RecipePickerCubit>().selectRecipe(widget.recipeModel!);
                 },
               ),
               SizedBox(width: 20),
-              widget.imageURL != null && widget.imageURL != ""
-              ? Row(
-                  children: [
-                    Container(
-                      height: 52,
-                      width: 52,
-                      decoration: BoxDecoration(
-                        color: ColorModel.disabledRed,
-                        borderRadius: Spacers.borderRadius
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                  ],
-                )
-              : SizedBox(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.title,
-                    style: Font.textLRegular
-                  ),
-                  widget.isTrailed == null || widget.isTrailed == false
-                  ? Column(
-                      children: [
-                        SizedBox(height: Spacers.s8),
-                        Text(
-                            widget.subtitle,
-                            style: Font.incLRegular.copyWith(
-                              color: ColorModel.majorText
+              Container(
+                child: InkWell(
+                  onTap: (){
+                    if(widget.recipeModel != null){
+                      Navigator.push(
+                        context,
+                        PageTransition(child: RecipePage(recipe: widget.recipeModel), type: PageTransitionType.rightToLeftWithFade)
+                      );
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      if(widget.recipeModel != null)
+                      widget.imageURL != null && widget.imageURL != ""
+                      ? Row(
+                          children: [
+                            Container(
+                              clipBehavior: Clip.antiAlias,
+                              height: 52,
+                              width: 52,
+                              decoration: BoxDecoration(
+                                color: ColorModel.disabledRed,
+                                borderRadius: Spacers.borderRadius
+                              ),
+                              child: Image.network(widget.imageURL ?? "", fit: BoxFit.cover)
                             ),
+                            SizedBox(width: 20),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Container(
+                              height: 52,
+                              width: 52,
+                              decoration: BoxDecoration(
+                                color: ColorModel.disabledRed,
+                                borderRadius: Spacers.borderRadius
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                          ],
+                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: Font.textLRegular
                           ),
-                      ],
-                    )
-                  : SizedBox()
-                ]
+                          widget.isTrailed == null || widget.isTrailed == false
+                          ? Column(
+                              children: [
+                                SizedBox(height: Spacers.s8),
+                                Text(
+                                    widget.subtitle,
+                                    style: Font.incLRegular.copyWith(
+                                      color: ColorModel.majorText
+                                    ),
+                                  ),
+                              ],
+                            )
+                          : SizedBox()
+                        ]
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

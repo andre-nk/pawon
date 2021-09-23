@@ -5,7 +5,9 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pawon/cubit/auth_cubit.dart';
 import 'package:pawon/cubit/page_cubit.dart';
+import 'package:pawon/cubit/plan_cubit.dart';
 import 'package:pawon/cubit/recipe_cubit.dart';
+import 'package:pawon/cubit/recipe_picker_cubit.dart';
 import 'package:pawon/shared/shared.dart';
 import 'package:pawon/ui/pages/pages.dart';
 
@@ -17,12 +19,6 @@ void main() async {
   runApp(
     MyApp(), // Wrap your app
   );
-  // runApp(
-  //   DevicePreview(
-  //     enabled: true,
-  //     builder: (context) => MyApp(), // Wrap your app
-  //   )
-  // );
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +30,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => PageCubit()),
         BlocProvider(create: (context) => AuthCubit()),
-        BlocProvider(create: (context) => RecipeCubit())
+        BlocProvider(create: (context) => RecipeCubit()),
+        BlocProvider(create: (context) => PlanCubit()),
+        BlocProvider(create: (context) => RecipePickerCubit())
       ],
       child: MaterialApp(
         theme: ThemeData(
