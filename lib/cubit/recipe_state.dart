@@ -29,6 +29,13 @@ class RecipeLoaded extends RecipeState {
   List<Object> get props => [recipes];
 }
 
+class SingleRecipeLoaded extends RecipeState {
+  final Stream<RecipeModel> recipe;
+  SingleRecipeLoaded(this.recipe);
+
+  @override
+  List<Object> get props => [recipe];
+}
 class RecipeFailed extends RecipeState {
   final String error;
   RecipeFailed(this.error);

@@ -9,12 +9,12 @@ class PlanCubit extends Cubit<PlanState> {
   PlanCubit() : super(PlanInitial());
 
   Future<void> createPlan({
-    required List<String> recipes,
+    required Map<String, int> recipes,
     required DateTime dateTime
   }) async {
     try {
       emit(PlanLoading());
-      if(recipes == []){
+      if(recipes == {}){
         emit(PlanFailed("Please choose at least one recipe"));
       }
       await PlanService().createPlan(recipes: recipes, dateTime: dateTime);
@@ -25,16 +25,34 @@ class PlanCubit extends Cubit<PlanState> {
   }
 
   Future<void> updatePlan({
-    required List<String> recipes,
+    required String id,
+    required Map<String, int> recipes,
     required DateTime dateTime
   }) async {
     try {
       emit(PlanLoading());
-      if(recipes == []){
+      if(recipes == {}){
         emit(PlanFailed("Please choose at least one recipe"));
       }
-      await PlanService().updatePlan(recipes: recipes, dateTime: dateTime);
+      await PlanService().updatePlan(id: id, recipes: recipes, dateTime: dateTime);
       emit(PlanCreated());
+    } catch (e) {
+      emit(PlanFailed(e.toString()));
+    }
+  }
+
+  Future<void> deletePlan(String id) async{
+    try {
+      await PlanService().deletePlan(id);
+    } catch (e) {
+    }
+  }
+
+  void fetchPlans(){
+    try {
+      emit(PlanLoading());
+      Stream<List<PlanModel>> planStream = PlanService().fetchPlan();
+      emit(PlanLoaded(planStream));
     } catch (e) {
       emit(PlanFailed(e.toString()));
     }

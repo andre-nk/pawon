@@ -7,7 +7,7 @@ class PlanService{
     .collection('plans');
 
   Future<void> createPlan({
-    required List<String> recipes,
+    required Map<String, int> recipes,
     required DateTime dateTime
   }) async {
     try {
@@ -20,12 +20,38 @@ class PlanService{
     }
   }
 
+  Stream<List<PlanModel>> fetchPlan(){
+    try {
+      final snapshot = planReference.snapshots().map((planList){
+        return planList.docs.map((plan){
+          return PlanModel.fromJson(
+            plan.id,
+            plan.data() as Map<String, dynamic>
+          ); 
+        }).toList(); 
+      });
+      return snapshot;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<void> deletePlan(String planID) async {
+    try {
+      planReference.doc(planID).delete();
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<void> updatePlan({
-    required List<String> recipes,
+    required String id,
+    required Map<String, int> recipes,
     required DateTime dateTime
   }) async {
     try {
       planReference.doc().update({
+        "id": id,
         "recipes": recipes,
         "dateTime": dateTime.toString()
       });

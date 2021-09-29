@@ -1,185 +1,69 @@
 part of 'pages.dart';
 
 class PlanPage extends StatefulWidget {
-  const PlanPage({ Key? key }) : super(key: key);
+  const PlanPage({Key? key}) : super(key: key);
 
   @override
   State<PlanPage> createState() => _PlanPageState();
 }
 
 class _PlanPageState extends State<PlanPage> {
-
   final scaffoldState = GlobalKey<ScaffoldState>();
-  final TextEditingController _searchController = TextEditingController();
 
   DateTime planCreatorDate = DateTime.now();
-  List<RecipeModel> pickedRecipes = [];
+  Map<String, int> planCreatorRecipes = {};
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<PlanCubit>().fetchPlans();
+    initializeDateFormatting();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    print(pickedRecipes);
-
-    Widget recipePicker(){
-      return Wrap(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacers.l28,
-              vertical: Spacers.l32,
-            ).copyWith(
-              bottom: 0
-            ),
-            height: MediaQuery.of(context).size.height * 0.8,
-            child: BlocConsumer<RecipeCubit, RecipeState>(
-              builder: (context, state){
-                return Stack(
-                  children: [
-                    Container(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex: 8,
-                                child: CustomForms(
-                                  isSearchForm: false,
-                                  placeholder: "Cari resep kamu disini",
-                                  controller: _searchController,
-                                  isObscured: false
-                                ),
-                              ),
-                              SizedBox(width: Spacers.m16),
-                              IconButton(
-                                onPressed: (){
-                                  Navigator.of(context).pop();
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context){
-                                      return CreateRecipeBottomsheet();
-                                    }
-                                  );
-                                },
-                                icon: Icon(
-                                  Ionicons.add_circle_outline,
-                                  size: 28,
-                                  color: ColorModel.majorText
-                                )
-                              )
-                            ],
-                          ),
-                          SizedBox(height: Spacers.m16),
-                          if(state is RecipeLoaded)
-                          StreamBuilder<List<RecipeModel>>(
-                            stream: state.recipes,
-                            builder: (context, snapshot) {
-                              if(snapshot.hasData){
-                                return Expanded(
-                                  flex: 8,
-                                  child: ListView.separated(
-                                    itemCount: snapshot.data!.length,
-                                    separatorBuilder: (context, index){
-                                      return Container(
-                                        height: 1,
-                                        width: double.infinity,
-                                        color: ColorModel.kBorder,
-                                      ); 
-                                    },
-                                    itemBuilder: (context, index){
-                                      return CheckBoxListTile(
-                                        imageURL: snapshot.data![index].coverURL,
-                                        recipeModel: snapshot.data![index],
-                                        title: snapshot.data![index].title,
-                                        subtitle: "${snapshot.data![index].cookTime}; ${snapshot.data![index].cookedTime}x dimasak",
-                                      );
-                                    },
-                                  )
-                                );
-                              } else {
-                                return SizedBox();
-                              }
-                            }
-                          ) else 
-                          SizedBox()
-                        ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        width: 350,
-                        margin: EdgeInsets.only(bottom: Spacers.l32),
-                        child: PrimaryButton(
-                          content: context.watch<RecipePickerCubit>().state.length == 0
-                          ? "Tambahkan Rencana"
-                          : "Tambahkan Rencana (${context.watch<RecipePickerCubit>().state.length} resep) ",
-                          isGoogleButton: false,
-                          isMinified: false,
-                          isCTA: false,
-                          isHovering: true,
-                          onPressed: (){}
-                        ),
-                      ),
-                    )
-                  ],
-                );
-              },
-              listener: (context, state){
-
-              }
-            )
-          )
-        ]
-      );
-    }
-
-    Widget calendarPicker(String source){
+    Widget calendarPicker(String source) {
       return Container(
         color: ColorModel.kWhite,
         height: 500,
         child: Column(
           children: [
             CustomAppBar(
-              title: "TANGGAL",
-              leftButton: "Batal",
-              rightButton: source == "Plan Creator" ? "Lanjut" : "Pilih",
-              rightButtonMethod: (){
-                if(source == "Plan Creator"){
+                title: "TANGGAL",
+                leftButton: "Batal",
+                rightButton: source == "Plan Creator" ? "Lanjut" : "Pilih",
+                rightButtonMethod: () {
+                  if (source == "Plan Creator") {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: PlanCreatorPage(
+                                planCreatorDate: planCreatorDate),
+                            type: PageTransitionType.rightToLeftWithFade));
+                  }
+                },
+                leftButtonMethod: () {
                   Navigator.pop(context);
-                  showModalBottomSheet(
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (context){
-                      return recipePicker();
-                    }
-                  );
-                }
-              },
-              leftButtonMethod: (){
-                Navigator.pop(context);
-              }
-            ),
+                }),
             Expanded(
               child: CupertinoTheme(
                 data: CupertinoThemeData(
                   textTheme: CupertinoTextThemeData(
-                    dateTimePickerTextStyle: Font.incXLRegular
-                  ),
+                      dateTimePickerTextStyle: Font.incXLRegular),
                 ),
                 child: CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (date){
-                    if(source == "Plan Creator"){
-                      print(date);
-                      setState(() {
-                        planCreatorDate = date;
-                      });
-                    } else {
-                      print(date);
-                    }
-                  }
-                ),
+                    mode: CupertinoDatePickerMode.date,
+                    onDateTimeChanged: (date) {
+                      if (source == "Plan Creator") {
+                        print(date);
+                        setState(() {
+                          planCreatorDate = date;
+                        });
+                      } else {
+                        print(date);
+                      }
+                    }),
               ),
             ),
           ],
@@ -187,7 +71,7 @@ class _PlanPageState extends State<PlanPage> {
       );
     }
 
-    Widget header(){
+    Widget header() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -198,56 +82,49 @@ class _PlanPageState extends State<PlanPage> {
                 "Rencana Masak",
                 style: Font.headingS,
               ),
-              SizedBox(height: Spacers.s4,),
+              SizedBox(
+                height: Spacers.s4,
+              ),
               Text(
                 "mau masak apa hari ini?",
                 style: Font.incLMedium,
               )
             ],
           ),
-          Row(
-            children: [
-              IconButton(
-                tooltip: "Kalendar",
-                padding: EdgeInsets.zero,
-                onPressed: (){
-                  showModalBottomSheet(
+          Row(children: [
+            IconButton(
+              tooltip: "Kalendar",
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                showModalBottomSheet(
                     context: context,
-                    builder: (context){
+                    builder: (context) {
                       return calendarPicker("");
-                    }
-                  );
-                },
-                icon: Icon(
-                  Ionicons.calendar_clear_outline,
-                  color: ColorModel.majorText
-                ),
-              ),
-              SizedBox(width: Spacers.s12),
-              IconButton(
-                tooltip: "Tambah Rencana",
-                padding: EdgeInsets.zero,
-                onPressed: (){
-                  showModalBottomSheet(
+                    });
+              },
+              icon: Icon(Ionicons.calendar_clear_outline,
+                  color: ColorModel.majorText),
+            ),
+            SizedBox(width: Spacers.s12),
+            IconButton(
+              tooltip: "Tambah Rencana",
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                showModalBottomSheet(
                     context: context,
-                    builder: (context){
+                    builder: (context) {
                       return calendarPicker("Plan Creator");
-                    }
-                  );
-                },
-                icon: Icon(
-                  Ionicons.add_circle_outline,
-                  color: ColorModel.majorText,
-                  size: 26
-                ),
-              ),
-            ]
-          )
+                    });
+              },
+              icon: Icon(Ionicons.add_circle_outline,
+                  color: ColorModel.majorText, size: 26),
+            ),
+          ])
         ],
       );
     }
 
-    Widget todayPlan(){
+    Widget todayPlan(PlanModel planModel) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -255,22 +132,70 @@ class _PlanPageState extends State<PlanPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Hari ini",
-                style: Font.textMRegular.copyWith(
-                  color: ColorModel.kText
-                )
+                planModel.dateTime.day == DateTime.now().day
+                ? "Hari ini"
+                : planModel.dateTime.day == DateTime.now().subtract(1.days).day
+                  ? "Kemarin"
+                  : DateFormat.yMMMMd('id').format(planModel.dateTime),
+                style: Font.textMRegular.copyWith(color: ColorModel.kText)
               ),
-              IconButton(
-                tooltip: "Mulai sesi",
-                padding: EdgeInsets.zero,
-                onPressed: (){
-                  Navigator.push(context, PageTransition(child: IngredientPage(), type: PageTransitionType.rightToLeftWithFade));
-                },
-                icon: Icon(
-                  Ionicons.play_circle_outline,
-                  size: 24,
-                  color: ColorModel.primaryRed
-                ),
+              Row(
+                children: [
+                  IconButton(
+                    tooltip: "Mulai sesi",
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          child: IngredientPage(),
+                          type: PageTransitionType.rightToLeftWithFade
+                        )
+                      );
+                    },
+                    icon: Icon(
+                      Ionicons.play_circle_outline,
+                      size: 24, color: ColorModel.primaryRed
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: "Hapus rencana",
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context){
+                          return CustomDialog(
+                            title: "Hapus rencana masak?", 
+                            content: "Penghapusan rencana masak tidak dapat dikembalikan", 
+                            negativeText: "Batal",
+                            positiveText: "Hapus",
+                            negativeFunction: (){
+                              Navigator.pop(context);
+                            },
+                            positiveFunction: (){
+                              Navigator.pop(context);
+                              context.read<PlanCubit>().deletePlan(planModel.id);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                customSnackBar(
+                                  content: "Rencana masak berhasil dihapus!",
+                                  icon: Icon(
+                                    Ionicons.information_circle_outline,
+                                    color: ColorModel.kBlue,
+                                  ),
+                                )
+                              );
+                            }
+                          );
+                        }
+                      );
+                    },
+                    icon: Icon(
+                      Ionicons.trash_bin_outline,
+                      size: 22, color: ColorModel.primaryRed
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -278,7 +203,9 @@ class _PlanPageState extends State<PlanPage> {
           Container(
             width: double.infinity,
             child: Column(
-              children: List.generate(5, (index){
+              children: List.generate(planModel.recipes.length, (index) {
+                var recipeEntity = planModel.recipes.entries.toList();
+                context.watch<RecipeCubit>().fetchRecipe(recipeEntity[index].key);
                 return Column(
                   children: [
                     Container(
@@ -286,7 +213,38 @@ class _PlanPageState extends State<PlanPage> {
                       width: double.infinity,
                       color: ColorModel.kBorder,
                     ),
-                    DualListTile(title: "Ayam Cabe Garam", trailing: "${index + 1} porsi")
+                    BlocBuilder<RecipeCubit, RecipeState>(
+                      builder: (context, state) {
+                        if(state is SingleRecipeLoaded){
+                          return StreamBuilder<RecipeModel>(
+                            stream: state.recipe,
+                            builder: (context, snapshot) {
+                              if(snapshot.hasData){
+                                return InkWell(
+                                  onTap: (){
+                                     Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        child: RecipePage(recipe: snapshot.data),
+                                        type: PageTransitionType.rightToLeftWithFade
+                                      )
+                                    ); 
+                                  },
+                                  child: DualListTile(
+                                    title: snapshot.data!.title,
+                                    trailing: "${recipeEntity[index].value} porsi"
+                                  ),
+                                ); 
+                              } else {
+                                return SizedBox();
+                              }
+                            }
+                          );
+                        } else {
+                          return SizedBox();
+                        }
+                      },
+                    )
                   ],
                 );
               })
@@ -301,35 +259,52 @@ class _PlanPageState extends State<PlanPage> {
       drawerEnableOpenDragGesture: false,
       backgroundColor: ColorModel.kWhite,
       endDrawer: Drawer(
-        child: Padding(
-          padding: EdgeInsets.all(Spacers.m24),
-          child: Column(
-            children: [
-              Text("abc")
-            ]
-          )
-        )
-      ),
+          child: Padding(
+              padding: EdgeInsets.all(Spacers.m24),
+              child: Column(children: [Text("abc")]))),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacers.l28,
-              vertical: Spacers.l32
-            ),
-            child: Column(
-              children: [
-                header(),
-                SizedBox(height: Spacers.l32),
-                Column(
-                  children: List.generate(3, (index){
-                    return todayPlan();
-                  }),
-                )
-              ],
-            ),
-          )
-        ),
+            child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: Spacers.l28, vertical: Spacers.l32),
+          child: Column(
+            children: [
+              header(),
+              SizedBox(height: Spacers.l32),
+              BlocConsumer<PlanCubit, PlanState>(
+                listener: (context, state){
+                  if(state is PlanFailed){
+                    print(state.error);
+                  }
+                },
+                builder: (context, state) {
+                  if(state is PlanLoaded){
+                    return StreamBuilder<List<PlanModel>>(
+                      stream: state.plan,
+                      builder: (context, snapshot) {
+                        if(snapshot.hasData){
+                          return Column(
+                            children: List.generate(snapshot.data!.length, (index) {
+                              return todayPlan(snapshot.data![index]);
+                            }),
+                          );
+                        } else {
+                          return SizedBox();
+                        }
+                      }
+                    );
+                  } else if (state is PlanLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(color: ColorModel.primaryRed)
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+                },
+              )
+            ],
+          ),
+        )),
       )
     );
   }

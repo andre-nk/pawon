@@ -163,5 +163,15 @@ class RecipeCubit extends Cubit<RecipeState>{
       emit(RecipeFailed(e.toString()));
     }
   }
+
+  void fetchRecipe(String recipeID) async {
+    try {
+      emit(RecipeLoading());
+      Stream<RecipeModel> recipe = RecipeService().fetchRecipe(recipeID);
+      emit(SingleRecipeLoaded(recipe));
+    } catch (e) {
+      emit(RecipeFailed(e.toString()));
+    }
+  }
 }
 

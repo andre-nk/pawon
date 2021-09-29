@@ -28,14 +28,16 @@ class CustomDialog extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(15)),
         side: BorderSide(color: ColorModel.kText)
       ),
-      child: AspectRatio(
-        aspectRatio: 2/1.75,
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            vertical: Spacers.l28,
-            horizontal: Spacers.l28
-          ),
-          child: Center(
+      child: Container(
+        padding: EdgeInsets.fromLTRB(
+          Spacers.l28,
+          Spacers.l28,
+          Spacers.l28,
+          12
+        ),
+        child: Wrap(
+          children: [
+            Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -55,34 +57,52 @@ class CustomDialog extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: Spacers.s12),
+                SizedBox(height: Spacers.m16),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    GestureDetector(
-                      onTap: this.negativeFunction,
-                      child: Text(
-                        this.negativeText,
-                        style: Font.textLRegular.copyWith(
-                          color: ColorModel.activeRed
+                    Expanded(
+                      child: TextButton(
+                        onPressed: this.negativeFunction,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacers.m16,
+                            vertical: Spacers.s8
+                          ),
+                          child: Text(
+                            this.negativeText,
+                            style: Font.textLRegular.copyWith(
+                              color: ColorModel.primaryRed
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: this.positiveFunction,
-                      child: Text(
-                        this.positiveText,
-                        style: Font.textLMedium.copyWith(
-                          color: ColorModel.kBlue
+                    Expanded(
+                      child: TextButton(
+                        onPressed: this.positiveFunction,
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateColor.resolveWith((states) => ColorModel.kBlue.withOpacity(0.05)),
                         ),
-                      ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacers.m16,
+                            vertical: Spacers.s8
+                          ),
+                          child: Text(
+                            this.positiveText,
+                            style: Font.textLRegular.copyWith(
+                              color: ColorModel.kBlue
+                            ),
+                          ),
+                        ),
+                      )
                     )
                   ]
                 )
               ],
             )
-          )
-        ),
+          ),]
+        )
       )
     );
   }

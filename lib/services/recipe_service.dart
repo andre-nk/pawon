@@ -81,4 +81,18 @@ class RecipeService{
       throw e;
     }
   }
+
+  Stream<RecipeModel> fetchRecipe(String recipeID){
+    try {
+      final snapshot = recipesReference.doc(recipeID).snapshots().map((recipe){
+        return RecipeModel.fromJson(
+          recipe.id,
+          recipe.data() as Map<String, dynamic>);
+        }
+      );
+      return snapshot;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

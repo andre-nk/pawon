@@ -14,7 +14,7 @@ class PlanLoading extends PlanState {}
 class PlanCreated extends PlanState {}
 
 class PlanLoaded extends PlanState {
-  final PlanModel plan;
+  final Stream<List<PlanModel>> plan;
   PlanLoaded(this.plan);
 
   @override

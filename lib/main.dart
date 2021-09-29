@@ -7,7 +7,6 @@ import 'package:pawon/cubit/auth_cubit.dart';
 import 'package:pawon/cubit/page_cubit.dart';
 import 'package:pawon/cubit/plan_cubit.dart';
 import 'package:pawon/cubit/recipe_cubit.dart';
-import 'package:pawon/cubit/recipe_picker_cubit.dart';
 import 'package:pawon/shared/shared.dart';
 import 'package:pawon/ui/pages/pages.dart';
 
@@ -32,7 +31,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => RecipeCubit()),
         BlocProvider(create: (context) => PlanCubit()),
-        BlocProvider(create: (context) => RecipePickerCubit())
       ],
       child: MaterialApp(
         theme: ThemeData(

@@ -13,6 +13,9 @@ class CheckBoxListTile extends StatefulWidget {
   State<CheckBoxListTile> createState() => _CheckBoxListTileState();
 }
 class _CheckBoxListTileState extends State<CheckBoxListTile> {  
+
+  bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,11 +29,23 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CustomCheckbox(
-                value: context.watch<RecipePickerCubit>().isSelected(widget.recipeModel!),
-                onChanged: (value){
-                  context.read<RecipePickerCubit>().selectRecipe(widget.recipeModel!);
-                },
+              Container(
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                  color: isSelected ? ColorModel.kGreen : ColorModel.kBorder,
+                  borderRadius: Spacers.borderRadius,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(2),
+                  child: isSelected
+                  ? Icon(
+                      Ionicons.checkmark_outline,
+                      size: 16,
+                      color: ColorModel.kWhite
+                    )
+                  : SizedBox()
+                ) 
               ),
               SizedBox(width: 20),
               Container(
