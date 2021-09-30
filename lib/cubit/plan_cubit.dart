@@ -57,4 +57,14 @@ class PlanCubit extends Cubit<PlanState> {
       emit(PlanFailed(e.toString()));
     }
   }
+
+  void fetchSinglePlan(DateTime dateTime){
+    try {
+      emit(PlanLoading());
+      Stream<List<PlanModel>> singlePlanStream = PlanService().fetchSingleDayPlan(dateTime);
+      emit(PlanLoaded(singlePlanStream));
+    } catch (e) {
+      throw e;
+    }
+  }
 }

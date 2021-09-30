@@ -66,6 +66,14 @@ class RecipeService{
     }
   }
 
+  Future<void> deleteRecipe({required String recipeID}) async {
+    try {
+      recipesReference.doc(recipeID).delete();
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Stream<List<RecipeModel>> fetchRecipes(){
     try {
       final snapshot = recipesReference.snapshots().map((recipeList){

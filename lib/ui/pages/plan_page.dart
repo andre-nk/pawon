@@ -254,6 +254,50 @@ class _PlanPageState extends State<PlanPage> {
       );
     }
 
+    Widget errorWidget(){
+      return Container(  
+        child: Center(
+          heightFactor: 3,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 125,
+                width: 125,
+                child: Image.asset("assets/404_egg.png")
+              ),
+              SizedBox(height: Spacers.s8),
+              Text(
+                "Kamu belum membuat rencana masak,",
+                style: Font.incLRegular
+              ),
+              SizedBox(height: Spacers.s8),
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(
+                    "tekan tombol",
+                    style: Font.incLRegular
+                  ),
+                  SizedBox(width: Spacers.s8),
+                  Icon(
+                    Ionicons.add_circle_outline,
+                    color: ColorModel.majorText,
+                    size: 24
+                  ),
+                  SizedBox(width: Spacers.s8),
+                  Text(
+                    "untuk membuat!",
+                    style: Font.incLRegular
+                  ),
+                ],
+              )
+            ],
+          )
+        ),
+      );
+    }
+
     return Scaffold(
       key: scaffoldState,
       drawerEnableOpenDragGesture: false,
@@ -264,7 +308,7 @@ class _PlanPageState extends State<PlanPage> {
               child: Column(children: [Text("abc")]))),
       body: SafeArea(
         child: SingleChildScrollView(
-            child: Padding(
+          child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: Spacers.l28, vertical: Spacers.l32),
           child: Column(
@@ -283,13 +327,17 @@ class _PlanPageState extends State<PlanPage> {
                       stream: state.plan,
                       builder: (context, snapshot) {
                         if(snapshot.hasData){
-                          return Column(
-                            children: List.generate(snapshot.data!.length, (index) {
-                              return todayPlan(snapshot.data![index]);
-                            }),
-                          );
+                          if (snapshot.data!.length == 0) {
+                            return errorWidget();
+                          } else {
+                            return Column(
+                              children: List.generate(snapshot.data!.length, (index) {
+                                return todayPlan(snapshot.data![index]);
+                              }
+                            ));
+                          }
                         } else {
-                          return SizedBox();
+                          return errorWidget();
                         }
                       }
                     );
@@ -298,7 +346,7 @@ class _PlanPageState extends State<PlanPage> {
                       child: CircularProgressIndicator(color: ColorModel.primaryRed)
                     );
                   } else {
-                    return SizedBox();
+                    return errorWidget();
                   }
                 },
               )

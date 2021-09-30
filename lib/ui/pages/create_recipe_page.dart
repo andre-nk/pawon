@@ -457,7 +457,7 @@ class _RecipePageState extends State<RecipePage> {
           } else if (state is RecipeCreated){
             Navigator.pushAndRemoveUntil(
               context,
-              PageTransition(child: HomePage(), type: PageTransitionType.rightToLeftWithFade),
+              PageTransition(child: WrapperPage(), type: PageTransitionType.rightToLeftWithFade),
               (route) => false
             );
             ScaffoldMessenger.of(context).showSnackBar(

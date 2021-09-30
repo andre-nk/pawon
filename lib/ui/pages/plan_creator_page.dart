@@ -15,9 +15,47 @@ class _PlanCreatorPageState extends State<PlanCreatorPage> {
   Map<String, int> planCreatorRecipes = {};
 
   @override
-  Widget build(BuildContext context) {  
+  void initState() {
+    super.initState();
+    context.read<RecipeCubit>().fetchRecipes();
+  }
 
-    print(planCreatorRecipes);
+  @override
+  Widget build(BuildContext context) {
+
+    Widget searchRecipe(){
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 8,
+            child: CustomForms(
+              isSearchForm: false,
+              placeholder: "Cari resep kamu disini",
+              controller: _searchController,
+              isObscured: false
+            ),
+          ),
+          SizedBox(width: Spacers.m16),
+          IconButton(
+            onPressed: (){
+              Navigator.of(context).pop();
+              showModalBottomSheet(
+                context: context,
+                builder: (context){
+                  return CreateRecipeBottomsheet();
+                }
+              );
+            },
+            icon: Icon(
+              Ionicons.add_circle_outline,
+              size: 28,
+              color: ColorModel.majorText
+            )
+          )
+        ],
+      );
+    }
 
     Widget recipePicker(){
       return Wrap(
@@ -37,37 +75,7 @@ class _PlanCreatorPageState extends State<PlanCreatorPage> {
                     Container(
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex: 8,
-                                child: CustomForms(
-                                  isSearchForm: false,
-                                  placeholder: "Cari resep kamu disini",
-                                  controller: _searchController,
-                                  isObscured: false
-                                ),
-                              ),
-                              SizedBox(width: Spacers.m16),
-                              IconButton(
-                                onPressed: (){
-                                  Navigator.of(context).pop();
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context){
-                                      return CreateRecipeBottomsheet();
-                                    }
-                                  );
-                                },
-                                icon: Icon(
-                                  Ionicons.add_circle_outline,
-                                  size: 28,
-                                  color: ColorModel.majorText
-                                )
-                              )
-                            ],
-                          ),
+                          searchRecipe(),
                           SizedBox(height: Spacers.m16),
                           state is RecipeLoaded
                           ? StreamBuilder<List<RecipeModel>>(

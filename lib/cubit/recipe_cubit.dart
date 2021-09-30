@@ -154,6 +154,14 @@ class RecipeCubit extends Cubit<RecipeState>{
     }
   }
 
+  Future<void> deleteRecipe(String recipeID) async {
+    try {
+      await RecipeService().deleteRecipe(recipeID: recipeID);
+    } catch (e) {
+      emit(RecipeFailed(e.toString()));
+    }
+  }
+
   void fetchRecipes() async {
     try {
       emit(RecipeLoading());

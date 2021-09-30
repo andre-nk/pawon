@@ -59,4 +59,22 @@ class PlanService{
       throw e;
     }
   }
+
+  Stream<List<PlanModel>> fetchSingleDayPlan(DateTime dateTime){
+    try {
+      final snapshot = planReference
+      .where("dateTime", isEqualTo: dateTime.toString())
+      .snapshots().map((plans){
+        return plans.docs.map((plan){
+          return PlanModel.fromJson(
+            plan.id,
+            plan.data() as Map<String, dynamic>
+          );
+        }).toList();
+      });
+      return snapshot;
+    } catch (e) {
+      throw e;
+    }
+  }
 }
